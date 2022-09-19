@@ -9,6 +9,20 @@
 #                                                                              -
 #  17.09.2022                                                                  -
 # ------------------------------------------------------------------------------
+#                                                                              -
+#    _____                      ____                                           -
+#   / ____|                    |  _ \                                          -
+#  | |  __  __ _ _ __ ___   ___| |_) | ___  _   _                              -
+#  | | |_ |/ _` | '_ ` _ \ / _ \  _ < / _ \| | | |                             -
+#  | |__| | (_| | | | | | |  __/ |_) | (_) | |_| |                             -
+#   \_____|\__,_|_| |_| |_|\___|____/ \___/ \__, |                             -
+#  |  __ (_)                                 __/ |                             -
+#  | |__) |  ___ ___                        |___/                              -
+#  |  ___/ |/ __/ _ \                                                          -
+#  | |   | | (_| (_) |                                                         -
+#  |_|   |_|\___\___/                                                          -
+#                                                                              -
+# ------------------------------------------------------------------------------
 
 
 # GameBoy Pico Components
@@ -26,88 +40,109 @@ import time
 # - START                                                                      -
 # ------------------------------------------------------------------------------
 
+################################################################################
 
 # Variables
+
+# device drivers
 display = Display()
 controller = Controller()
+
+# engine
+# TODO create engine.py and Engine class for movement and animations in games
+
+# menu data
 menu_index = 0
 game_selected = False
 selected_game = 0
 menu_entries = ["1", "2", "3"]
+
 # dotgame = DotGame(display, controller) - does not exist yet
+# TODO game class and subclasses for every game
 
 
 # Methods
 
+# game selection menu
 def menu():
-  global display
-  global menu_index
-  global game_selected
-  global selected_game
-  global menu_entries
+    global display
+    global menu_index
+    global game_selected
+    global selected_game
+    global menu_entries
 
-  while not game_selected:
-    display.showtext(menu_entries[menu_index], 0, 1)
-    if (controller.left()):
-      menu_button_left()
-    if (controller.right()):
-      menu_button_right()
-    if (controller.down()):
-      game_selected = True
+    while not game_selected:
+        display.showtext(menu_entries[menu_index], 0, 1)
+        if (controller.left()):
+            menu_button_left()
+        if (controller.right()):
+            menu_button_right()
+        if (controller.down()):
+            game_selected = True
 
-    time.sleep(0.1)
-  
-  return menu_index
+        time.sleep(0.1) # really necessary?
+        # maybe the menu should only be updated when a button is pressed
+        # so that the menu is less laggy
+
+    return menu_index # selected_game
 # END OF menu()
 
 
+# game selection menu move left
 def menu_button_left():
-  global menu_entries
-  global menu_index
+    global menu_entries
+    global menu_index
 
-  if (menu_index < 0):
-    menu_index = len(menu_entries) - 1
-  else:
-    menu_index = menu_index - 1
+    if (menu_index < 0):
+        menu_index = len(menu_entries) - 1
+    else:
+        menu_index = menu_index - 1
 # END OF menu_button_left()
 
 
+# game sleection menu move right
 def menu_button_right():
-  global menu_entries
-  global menu_index
+    global menu_entries
+    global menu_index
 
-  if (menu_index > len(menu_entries) - 1):
-    menu_index = 0
-  else:
-    menu_index = menu_index + 1
+    if (menu_index > len(menu_entries) - 1):
+        menu_index = 0
+    else:
+        menu_index = menu_index + 1
 # END OF menu_button_right()
 
+# END OF game selection menu
+################################################################################
 
+# a "game" in which a point or pixel is moved with the 4 buttons
 def dotgame():
-  global display
-  global controller
-  x = 0
-  y = 0
-    
-  while True:
-    display.showpixel(x, y)
-    if (controller.up()):
-        y = y - 1
-    if (controller.down()):
-        y = y + 1
-    if (controller.left()):
-        x = x - 1
-    if (controller.right()):
-        x = x + 1
+    global display
+    global controller
+    x = 0
+    y = 0
 
-    if (x > 8):
-        x = 0
-    if (y > 8):
-        y = 0
-    if (x < -1):
-        x = 7
-    if (y < -1):
-        y = 7
+    while True:
+        display.showpixel(x, y)
+        if (controller.up()):
+            y = y - 1
+        if (controller.down()):
+            y = y + 1
+        if (controller.left()):
+            x = x - 1
+        if (controller.right()):
+            x = x + 1
+
+        # when the coordinates of the point overflow
+        # they rollback to the "negative" value
+        # exit right > enter left and visa versa
+        if (x > 8):
+            x = 0
+        if (y > 8):
+            y = 0
+        if (x < -1):
+            x = 7
+        if (y < -1):
+            y = 7
 
     #time.sleep(0.1)
 # END OF dotgame()
@@ -130,8 +165,8 @@ def stackgame():
   while True:
     for l in lines:
       display.hline(l[0],l[1],l[2],1)
-      
-    
+
+
     display.hline(x, y, w, 1)
     display.show()
     if(dir == "l"):
@@ -164,7 +199,7 @@ def stackgame():
         y = y + 1
 
       display.show()
-      lines.append([x, y ,w])
+      lines.append([x, y, w])
       x = 1
       y = y - 1
       pressed = True
@@ -175,46 +210,58 @@ def stackgame():
 
 
 def tetris():
-  y = 0
-  x = 0
-  blocks = []
-  while True:
-    display.fill(0)
-    display.pixel(0 + x,0 + y,1)
-    display.pixel(1 + x,0 + y,1)
-    display.pixel(2 + x,0 + y,1)
-    display.pixel(2 + x,1 + y,1)
+    y = 0
+    x = 0
+    blocks = []
+    while True:
+        display.fill(0)
+        display.pixel(0 + x,0 + y,1)
+        display.pixel(1 + x,0 + y,1)
+        display.pixel(2 + x,0 + y,1)
+        display.pixel(2 + x,1 + y,1)
 
-    display.show()
-    time.sleep(0.3)
-    if controller.left() and y + 3 < 7:
-      x = x - 1
-    if controller.right() and y + 3 < 7:
-      x = x + 1
-    if(y + 3 < 7):
-      y = y + 1
+        display.show()
+        time.sleep(0.3)
+        if controller.left() and y + 3 < 7:
+            x = x - 1
+        if controller.right() and y + 3 < 7:
+            x = x + 1
+        if(y + 3 < 7):
+            y = y + 1
 # END OF tetris()
 
 # Main Method
 # runs until the device is killed by physically shut off
+# the print output
 def run():
-  display.splashscreen()
-  
-  while True:
-    selected_game = menu()
+    print("Hello World")
+    display.splashscreen()
+    print("boot finished")
 
-    if (selected_game == 0):
-      dotgame()
-    elif (selected_game == 1):
-      stackgame()
-    elif (selected_game == 2):
-      tetris()
+    while True:
+        print("menu")
+        selected_game = menu()
+        print("selected game: " + selected_game)
+
+        if (selected_game == 0):
+            print("dotgame")
+            dotgame()
+        elif (selected_game == 1):
+            print("stackgame")
+            stackgame()
+        elif (selected_game == 2):
+            print("tetris")
+            tetris()
+        else:
+            break # restart console when no game is defined for selected_game
 # END OF run()
 
 
 #  finally running the program
+# this should be the only method running in the class
 run()
 
+################################################################################
 
 # ------------------------------------------------------------------------------
 # - END                                                                        -
