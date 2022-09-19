@@ -1,60 +1,104 @@
-from machine import Pin
-# Import MicroPython libraries of PIN and SPI
-from machine import Pin, SPI
+# ------------------------------------------------------------------------------
+#  GameBoy Pico                                                                -
+#  GNU GPL v3.0 License                                                        -
+#                                                                              -
+#  Julian Pieles                                                               -
+#  Gabriel Walter                                                              -
+#                                                                              -
+#  Hausmesseprojekt E3FI2 2022                                                 -
+#                                                                              -
+#  17.09.2022                                                                  -
+# ------------------------------------------------------------------------------
 
-# Import MicoPython max7219 library
-import max7219
 
+# GameBoy Pico Components
+from display import Display
 from controller import Controller
 
-# Import time
+# Games
+# from dotgame import DotGame - does not exist yet
+#from tetrisblock import TetrisBlock
+
+# Utils
 import time
 
-# Intialize the SPI
-spi = SPI(0, baudrate=10000000, polarity=1, phase=0, sck=Pin(2), mosi=Pin(3))
-ss = Pin(5, Pin.OUT)
+# ------------------------------------------------------------------------------
+# - START                                                                      -
+# ------------------------------------------------------------------------------
 
-# Create matrix display instant, which has four MAX7219 devices.
-display = max7219.Matrix8x8(spi, ss, 1)
 
+# Variables
+display = Display()
 controller = Controller()
+menu_index = 0
+game_selected = False
+selected_game = 0
+menu_entries = ["1", "2", "3"]
+# dotgame = DotGame(display, controller) - does not exist yet
 
-# Set the display brightness. Value is 1 to 15.
-display.brightness(10)
 
-# Define the scrolling message
-scrolling_message = "RASPBERRY PI PICO AND MAX7219 -- 8x8 DOT MATRIX SCROLLING DISPLAY"
+# Methods
 
-# Get the message length
-length = len(scrolling_message)
+def menu():
+  global display
+  global menu_index
+  global game_selected
+  global selected_game
+  global menu_entries
 
-# Calculate number of columns of the message
-column = (length * 8)
+  while not game_selected:
+    display.showtext(menu_entries[menu_index], 0, 1)
+    if (controller.left()):
+      menu_button_left()
+    if (controller.right()):
+      menu_button_right()
+    if (controller.down()):
+      game_selected = True
 
-# Clear the display.
-display.fill(0)
-display.show()
+    time.sleep(0.1)
+  
+  return menu_index
+# END OF menu()
 
-# sleep for one one seconds
-time.sleep(1)
 
-x = 0
-y = 0
-w = 8
+def menu_button_left():
+  global menu_entries
+  global menu_index
 
-# Unconditionally execute the loop
-while True:
-    display.fill(0)
-    display.pixel(x, y, 1)
-    display.show()
+  if (menu_index < 0):
+    menu_index = len(menu_entries) - 1
+  else:
+    menu_index = menu_index - 1
+# END OF menu_button_left()
+
+
+def menu_button_right():
+  global menu_entries
+  global menu_index
+
+  if (menu_index > len(menu_entries) - 1):
+    menu_index = 0
+  else:
+    menu_index = menu_index + 1
+# END OF menu_button_right()
+
+
+def dotgame():
+  global display
+  global controller
+  x = 0
+  y = 0
+    
+  while True:
+    display.showpixel(x, y)
     if (controller.up()):
         y = y - 1
     if (controller.down()):
         y = y + 1
     if (controller.left()):
-        x = x + 1
-    if (controller.right()):
         x = x - 1
+    if (controller.right()):
+        x = x + 1
 
     if (x > 8):
         x = 0
@@ -65,16 +109,113 @@ while True:
     if (y < -1):
         y = 7
 
-    time.sleep(0.1)
-    '''
+    #time.sleep(0.1)
+# END OF dotgame()
+
+
+def stackgame():
+  global display
+  global controller
+
+  x = 1
+  y = 6
+  w = 6
+
+  display.fill(0)
+  display.hline(1, 7, 6, 1)
+  display.show()
+  pressed = False
+  lines = [[1, 7, 6]]
+  dir = "l"
+  while True:
+    for l in lines:
+      display.hline(l[0],l[1],l[2],1)
+      
+    
     display.hline(x, y, w, 1)
-    display.vline(x, y, w, 1)
     display.show()
-    time.sleep(0.2)
-    y = y + 1
-    x = x + 1
-    if(y > 7):
-      y = -1
-    if(x > 7):
-      x = -1
-    '''
+    if(dir == "l"):
+      x = x + 1
+      if x > 8:
+        dir = "r"
+
+    if(dir == "r"):
+      x = x - 1
+      if x <= 0 - w:
+        dir = "l"
+
+    if(controller.down()):
+      nx = x
+      ny = y
+      nw = w
+
+      """
+      oline = lines[len(lines) - 1]
+      if oline[0] > nx:
+        diff = oline[0] - nx
+        nx = nx + diff
+        wx = wx - diff
+      """
+
+      display.hline(nx, ny, nw, 1)
+      if y < 3:
+        for l in lines:
+          l[1] = l[1] + 1
+        y = y + 1
+
+      display.show()
+      lines.append([x, y ,w])
+      x = 1
+      y = y - 1
+      pressed = True
+
+    time.sleep(0.1)
+    display.fill(0)
+# END OF stackgame()
+
+
+def tetris():
+  y = 0
+  x = 0
+  blocks = []
+  while True:
+    display.fill(0)
+    display.pixel(0 + x,0 + y,1)
+    display.pixel(1 + x,0 + y,1)
+    display.pixel(2 + x,0 + y,1)
+    display.pixel(2 + x,1 + y,1)
+
+    display.show()
+    time.sleep(0.3)
+    if controller.left() and y + 3 < 7:
+      x = x - 1
+    if controller.right() and y + 3 < 7:
+      x = x + 1
+    if(y + 3 < 7):
+      y = y + 1
+# END OF tetris()
+
+# Main Method
+# runs until the device is killed by physically shut off
+def run():
+  display.splashscreen()
+  
+  while True:
+    selected_game = menu()
+
+    if (selected_game == 0):
+      dotgame()
+    elif (selected_game == 1):
+      stackgame()
+    elif (selected_game == 2):
+      tetris()
+# END OF run()
+
+
+#  finally running the program
+run()
+
+
+# ------------------------------------------------------------------------------
+# - END                                                                        -
+# ------------------------------------------------------------------------------

@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "author": "Anonymous maker",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-pi-pico", "id": "pico", "top": 92.75, "left": 0, "attrs": {} },
+    {
+      "type": "wokwi-max7219-matrix",
+      "id": "matrix1",
+      "top": -76.2,
+      "left": -24.99,
+      "attrs": { "chain": "1" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn1",
+      "top": 327,
+      "left": 94,
+      "attrs": { "color": "green", "key": "w" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn3",
+      "top": 403.8,
+      "left": 94,
+      "attrs": { "color": "green", "key": "d" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn4",
+      "top": 461.4,
+      "left": 17.2,
+      "attrs": { "color": "green", "key": "s" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn2",
+      "top": 394.2,
+      "left": -30.8,
+      "attrs": { "color": "green", "key": "a" }
+    }
+  ],
+  "connections": [
+    [ "pico:GP0", "$serialMonitor:RX", "", [] ],
+    [ "pico:GP1", "$serialMonitor:TX", "", [] ],
+    [ "btn4:1.r", "pico:3V3", "green", [ "h81", "v-326.4" ] ],
+    [ "btn1:1.r", "pico:3V3", "green", [ "h4.2", "v-192" ] ],
+    [ "btn3:1.r", "pico:3V3", "green", [ "h4.2", "v-268.8" ] ],
+    [ "btn2:1.r", "pico:3V3", "green", [ "h129", "v-259.2" ] ],
+    [ "btn2:2.r", "pico:GP17", "green", [ "h282.6", "v-151.8" ] ],
+    [ "btn4:2.r", "pico:GP18", "green", [ "h244.2", "v-238.2" ] ],
+    [ "btn3:2.r", "pico:GP19", "green", [ "h177", "v-190.2" ] ],
+    [ "pico:GP16", "btn1:2.l", "green", [ "h7.4", "v75" ] ],
+    [ "pico:GP3", "matrix1:DIN", "green", [ "h-96", "v-268.8", "h249.6", "v86.4" ] ],
+    [ "pico:GND.1", "matrix1:GND", "black", [ "h-86.4", "v-240", "h230.4", "v67.2" ] ],
+    [
+      "pico:VBUS",
+      "matrix1:V+",
+      "green",
+      [ "h17", "v-38.4", "h-172.8", "v-172.8", "h211.2", "v48" ]
+    ],
+    [ "pico:GP5", "matrix1:CS", "green", [ "h-105.6", "v-297.6", "h268.8", "v105.6" ] ],
+    [ "pico:GP6", "matrix1:CLK", "green", [ "h-115.2", "v-326.4", "h288", "v124.8" ] ]
+  ]
+}
