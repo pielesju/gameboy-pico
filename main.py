@@ -258,7 +258,47 @@ def collectgame()
     time.sleep(0.2)
 # END OF collectgame()
 
+def snakegame():
+  class Board:
+    def __init__(self):
+      self.state = [
+        ['e','e','e','e','e','e','e','e'],
+        ['e','f','e','e','e','e','e','e'],
+        ['e','e','e','e','e','e','e','e'],
+        ['e','e','e','e','e','e','e','e'],
+        ['e','e','e','e','b','e','e','e'],
+        ['e','e','e','e','e','e','e','e'],
+        ['e','e','e','e','e','e','e','e'],
+        ['e','e','e','e','e','e','e','e'],
+      ]
+    def draw(self):
+      for x in range(8):
+        for y in range(8):
+          if self.board[x][y] == 'e':
+            display.pixel(x, y);
+  class Snake:
 
+    def __init__(self, length, direction):
+      self.length = length
+      self.direction = direction #one of 'up', 'down', 'left', 'right'
+
+    def move(self):
+      #todo
+    
+    def detectCollision(self):
+      #todo
+
+    def lengthen(self):
+      #todo
+
+  myBoard = Board()
+  # player = Snake(4, up)
+
+  while True:
+    myBoard.draw()
+    time.sleep(1)
+    display.fill(0)
+    
 # Main Method
 # runs until the device is killed by physically shut off
 # the print output
