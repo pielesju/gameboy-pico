@@ -271,11 +271,14 @@ def snakegame():
         ['e','e','e','e','e','e','e','e'],
         ['e','e','e','e','e','e','e','e'],
       ]
+
     def draw(self):
       for x in range(8):
         for y in range(8):
-          if self.board[x][y] == 'e':
-            display.pixel(x, y);
+          if self.state[x][y] != 'e':
+            time.sleep(0.5)
+            display.showpixel(x, y)
+
   class Snake:
 
     def __init__(self, length, direction):
@@ -284,20 +287,22 @@ def snakegame():
 
     def move(self):
       #todo
+      pass
     
     def detectCollision(self):
       #todo
+      pass
 
     def lengthen(self):
       #todo
+      pass
 
   myBoard = Board()
   # player = Snake(4, up)
 
   while True:
     myBoard.draw()
-    time.sleep(1)
-    display.fill(0)
+#end of snakegame()
     
 # Main Method
 # runs until the device is killed by physically shut off
