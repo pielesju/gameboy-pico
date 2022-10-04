@@ -232,7 +232,7 @@ def tetris():
 
 
 # collect falling blocks
-def collectgame()
+def collectgame():
   y = 7
   x = 3
   by = 0
