@@ -275,9 +275,9 @@ def snakegame():
     def draw(self):
       for x in range(8):
         for y in range(8):
-          if self.state[x][y] != 'e':
-            time.sleep(0.5)
-            display.showpixel(x, y)
+          time.sleep(0.5)
+          display.pixel(x, y, 1)
+          display.show()
 
   class Snake:
 
@@ -300,14 +300,14 @@ def snakegame():
   myBoard = Board()
   # player = Snake(4, up)
 
-  while True:
-    myBoard.draw()
+  myBoard.draw()
 #end of snakegame()
     
 # Main Method
 # runs until the device is killed by physically shut off
 # the print output
 def run():
+    snakegame()
     print("Hello World")
     display.splashscreen()
     print("boot finished")
@@ -343,3 +343,4 @@ run()
 # ------------------------------------------------------------------------------
 # - END                                                                        -
 # ------------------------------------------------------------------------------
+

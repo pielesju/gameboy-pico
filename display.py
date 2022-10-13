@@ -8,7 +8,7 @@ class Display:
         self.spi = SPI(0, baudrate=10000000, polarity=0, phase=0, sck=Pin(6), mosi=Pin(3))
         self.ss = Pin(5, Pin.OUT)
         display = max7219.Matrix8x8(self.spi, self.ss, 1)
-        display.brightness(10)
+        display.brightness(1)
         self.fill = display.fill
         self.pixel = display.pixel
         self.hline = display.hline

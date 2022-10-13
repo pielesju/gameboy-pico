@@ -47,8 +47,8 @@ class Matrix8x8:
         self.cs.init(cs.OUT, True)
         self.buffer = bytearray(8 * num)
         self.num = num
-        #fb = framebuf.FrameBuffer(self.buffer, 8 * num, 8, framebuf.MONO_HLSB)
-        fb = framebuf.FrameBuffer(self.buffer, 8 * num, 8, framebuf.MONO_HMSB)
+        fb = framebuf.FrameBuffer(self.buffer, 8 * num, 8, framebuf.MONO_HLSB)
+        #fb = framebuf.FrameBuffer(self.buffer, 8 * num, 8, framebuf.MONO_HMSB)
         self.framebuf = fb
         # Provide methods for accessing FrameBuffer graphics primitives. This is a workround
         # because inheritance from a native class is currently unsupported.
