@@ -259,48 +259,88 @@ def collectgame():
 # END OF collectgame()
 
 def snakegame():
-  class Board:
-    def __init__(self):
-      self.state = [
-        ['e','e','e','e','e','e','e','e'],
-        ['e','f','e','e','e','e','e','e'],
-        ['e','e','e','e','e','e','e','e'],
-        ['e','e','e','e','e','e','e','e'],
-        ['e','e','e','e','b','e','e','e'],
-        ['e','e','e','e','e','e','e','e'],
-        ['e','e','e','e','e','e','e','e'],
-        ['e','e','e','e','e','e','e','e'],
-      ]
-
-    def draw(self):
-      for x in range(8):
-        for y in range(8):
-          time.sleep(0.5)
-          display.pixel(x, y, 1)
-          display.show()
-
   class Snake:
 
-    def __init__(self, length, direction):
+    def __init__(self, length, direction, startx, starty):
       self.length = length
       self.direction = direction #one of 'up', 'down', 'left', 'right'
+      self.headx = startx
+      self.heady = starty
 
-    def move(self):
-      #todo
-      pass
+    def move(self, direction):
+      if direction != None:
+        #if ((self.direction == 'up'    and direction == 'down' ) or
+        #    (self.direction == 'down'  and direction == 'up'   ) or
+        #    (self.direction == 'left'  and direction == 'right') or
+        #    (self.direction == 'right' and direction == 'left' )):
+        self.direction = direction
+        
+      if self.direction == 'up':
+        self.heady -= 1
+      elif self.direction == 'down':
+        self.heady += 1
+      elif self.direction == 'left':
+        self.headx -= 1
+      elif self.direction == 'right':
+        self.headx += 1
     
     def detectCollision(self):
       #todo
       pass
 
     def lengthen(self):
-      #todo
-      pass
+      self.length += 1
 
-  myBoard = Board()
-  # player = Snake(4, up)
+  class Board:
+    def __init__(self, snake):
+      self.state = [
+        ['w','w','w','w','w','w','w','w'],
+        ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
+        ['w', 0 ,'a', 0 , 0 , 0 , 0 ,'w'],
+        ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
+        ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
+        ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
+        ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
+        ['w','w','w','w','w','w','w','w'],
+      ]
+      self.snake = snake
+      self.state[self.snake.headx][self.snake.heady] = self.snake.length
 
+    def draw(self):
+      for x in range(8):
+        for y in range(8):
+          if self.state[x][y] != 0:
+            display.pixel(x, y, 1)
+          else:
+            display.pixel(x, y, 0)
+                
+      display.show()
+    
+    def recalculateState(self):
+      self.state[self.snake.headx][self.snake.heady] = self.snake.length
+      for x in range(8):
+        for y in range(8):
+          currentpixel = self.state[x][y]
+          if type(currentpixel) == int and currentpixel > 0:
+            self.state[x][y] -= 1
+    def debugPrint(self):
+      for y in range(8):
+        for x in range(8):
+          print(self.state[x][y], end='')
+        print('')
+      print('')
+      
+  player = Snake(4, 'up', 6, 6)
+  myBoard = Board(player)
   myBoard.draw()
+  time.sleep(1)
+    
+  while True:
+    myBoard.recalculateState()
+    player.move('up')
+    myBoard.draw()
+    myBoard.debugPrint()
+    time.sleep(1)
 #end of snakegame()
     
 # Main Method
