@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+.picowgo
+.vscode/extensions.json
+.vscode/settings.json
+.vscode/Pico-W-Stub
