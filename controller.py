@@ -40,4 +40,4 @@ class Controller:
         self.last_button_pressed = None
 
 if __name__ == "__main__":
-   ctrl = Controller()
+    ctrl = Controller()

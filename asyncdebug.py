@@ -1,7 +1,7 @@
 
 import time
 from button import Button
-from machine import Timer
+from machine import Timer, Pin
 from display import Display
 from controller import Controller
 
@@ -60,6 +60,8 @@ class AsyncDebug:
             [0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0]
         ]
+        self.led = Pin("LED", Pin.OUT)
+
     def draw(self, direction):
         state = direction
         for x in range(8):
@@ -70,27 +72,30 @@ class AsyncDebug:
                     display.pixel(x, y, 0)
     
     def loop(self, t):
-        display.pixel(0,0,1)
-        display.show()
-        time.sleep_ms(200)
-        display.pixel(0,0,0)
-        display.show()
-        print(self.controller.last_button_pressed)
-        if (self.controller.last_button_pressed == 'up'):
-            self.draw(self.up)
-        elif (self.controller.last_button_pressed == 'down'):
-            self.draw(self.down)
-        elif (self.controller.last_button_pressed == 'left'):
-            self.draw(self.left)
-        elif (self.controller.last_button_pressed == 'right'):
-            self.draw(self.right)
-        else:
-            self.draw(self.empty)
-            print('none')
+        self.led.toggle()
+
+        #last press
+        lp = self.controller.last_button_pressed
+        
+        print('last_press: ', lp)
+        
+        if (lp == 'up'): self.draw(self.up)
+        elif (lp == 'down'): self.draw(self.down)
+        elif (lp == 'left'): self.draw(self.left)
+        elif (lp == 'right'): self.draw(self.right)
+        else: self.draw(self.empty)
         
         display.show()
         self.controller.reset_press()
     
     def run(self):
-        timer = Timer()
-        timer.init(mode=Timer.PERIODIC, period=500, callback=self.loop)
+        game_loop_timer = Timer()
+        game_loop_timer.init(mode=Timer.PERIODIC, period=500, callback=self.loop)
+
+        # led_timer = Timer()
+        # led_timer.init(mode=Timer.PERIODIC, period=250, callback=lambda t:led.toggle())
+
+        
+if __name__ == "__main__":
+    game = AsyncDebug()
+    game.run()
