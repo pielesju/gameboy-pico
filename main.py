@@ -260,121 +260,35 @@ def collectgame():
     time.sleep(0.2)
 # END OF collectgame()
 
-def snakegame():
-  class Snake:
-
-    def __init__(self, length, direction, startx, starty):
-      self.length = length
-      self.direction = direction #one of 'up', 'down', 'left', 'right'
-      self.headx = startx
-      self.heady = starty
-
-    def move(self, direction):
-      if direction != None:
-        #if ((self.direction == 'up'    and direction == 'down' ) or
-        #    (self.direction == 'down'  and direction == 'up'   ) or
-        #    (self.direction == 'left'  and direction == 'right') or
-        #    (self.direction == 'right' and direction == 'left' )):
-        self.direction = direction
-        
-      if self.direction == 'up':
-        self.heady -= 1
-      elif self.direction == 'down':
-        self.heady += 1
-      elif self.direction == 'left':
-        self.headx -= 1
-      elif self.direction == 'right':
-        self.headx += 1
-    
-    def detectCollision(self):
-      #todo
-      pass
-
-    def lengthen(self):
-      self.length += 1
-
-  class Board:
-    def __init__(self, snake):
-      self.state = [
-        ['w','w','w','w','w','w','w','w'],
-        ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
-        ['w', 0 ,'a', 0 , 0 , 0 , 0 ,'w'],
-        ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
-        ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
-        ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
-        ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
-        ['w','w','w','w','w','w','w','w'],
-      ]
-      self.snake = snake
-      self.state[self.snake.headx][self.snake.heady] = self.snake.length
-
-    def draw(self):
-      for x in range(8):
-        for y in range(8):
-          if self.state[x][y] != 0:
-            display.pixel(x, y, 1)
-          else:
-            display.pixel(x, y, 0)
-                
-      display.show()
-    
-    def recalculateState(self):
-      self.state[self.snake.headx][self.snake.heady] = self.snake.length
-      for x in range(8):
-        for y in range(8):
-          currentpixel = self.state[x][y]
-          if type(currentpixel) == int and currentpixel > 0:
-            self.state[x][y] -= 1
-    def debugPrint(self):
-      for y in range(8):
-        for x in range(8):
-          print(self.state[x][y], end='')
-        print('')
-      print('')
-      
-  player = Snake(4, 'up', 6, 6)
-  myBoard = Board(player)
-  myBoard.draw()
-  time.sleep(1)
-    
-  while True:
-    myBoard.recalculateState()
-    player.move('up')
-    myBoard.draw()
-    myBoard.debugPrint()
-    time.sleep(1)
-#end of snakegame()
 
 # Main Method
 # runs until the device is killed by physically shut off
 # the print output
 def run():
-    game = AsyncDebug()
-    game.run()
-    # print("Hello World")
-    # display.splashscreen()
-    # print("boot finished")
+    print("Hello World")
+    display.splashscreen()
+    print("boot finished")
 
-    # while True:
-    #     print("menu")
-    #     selected_game = menu()
-    #     print("selected game: " + selected_game)
+    while True:
+        print("menu")
+        selected_game = menu()
+        print("selected game: " + selected_game)
 
-    #     if (selected_game == 0):
-    #         print("dotgame")
-    #         dotgame()
-    #     elif (selected_game == 1):
-    #         print("stackgame")
-    #         stackgame()
-    #     elif (selected_game == 2):
-    #         print("tetris")
-    #         tetris()
-    #     elif (selected_game == 3):
-    #         print("collectgame")
-    #         collectgame()
-    #     else:
-    #         break # restart console when no game is defined for selected_game
-    # # END OF run()
+        if (selected_game == 0):
+            print("dotgame")
+            dotgame()
+        elif (selected_game == 1):
+            print("stackgame")
+            stackgame()
+        elif (selected_game == 2):
+            print("tetris")
+            tetris()
+        elif (selected_game == 3):
+            print("collectgame")
+            collectgame()
+        else:
+            break # restart console when no game is defined for selected_game
+# END OF run()
 
 
 #  finally running the program
