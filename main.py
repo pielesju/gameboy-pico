@@ -32,9 +32,12 @@ from controller import Controller
 # Games
 # from dotgame import DotGame - does not exist yet
 #from tetrisblock import TetrisBlock
+from asyncdebug import AsyncDebug
+from snake import SnakeGame
 
 # Utils
 import time
+from machine import Timer
 
 # ------------------------------------------------------------------------------
 # - START                                                                      -
@@ -342,36 +345,37 @@ def snakegame():
     myBoard.debugPrint()
     time.sleep(1)
 #end of snakegame()
-    
+
 # Main Method
 # runs until the device is killed by physically shut off
 # the print output
 def run():
-    snakegame()
-    print("Hello World")
-    display.splashscreen()
-    print("boot finished")
+    game = SnakeGame()
+    game.run()
+    # print("Hello World")
+    # display.splashscreen()
+    # print("boot finished")
 
-    while True:
-        print("menu")
-        selected_game = menu()
-        print("selected game: " + selected_game)
+    # while True:
+    #     print("menu")
+    #     selected_game = menu()
+    #     print("selected game: " + selected_game)
 
-        if (selected_game == 0):
-            print("dotgame")
-            dotgame()
-        elif (selected_game == 1):
-            print("stackgame")
-            stackgame()
-        elif (selected_game == 2):
-            print("tetris")
-            tetris()
-        elif (selected_game == 3):
-            print("collectgame")
-            collectgame()
-        else:
-            break # restart console when no game is defined for selected_game
-# END OF run()
+    #     if (selected_game == 0):
+    #         print("dotgame")
+    #         dotgame()
+    #     elif (selected_game == 1):
+    #         print("stackgame")
+    #         stackgame()
+    #     elif (selected_game == 2):
+    #         print("tetris")
+    #         tetris()
+    #     elif (selected_game == 3):
+    #         print("collectgame")
+    #         collectgame()
+    #     else:
+    #         break # restart console when no game is defined for selected_game
+    # # END OF run()
 
 
 #  finally running the program
@@ -383,4 +387,3 @@ run()
 # ------------------------------------------------------------------------------
 # - END                                                                        -
 # ------------------------------------------------------------------------------
-
