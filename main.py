@@ -28,11 +28,13 @@
 # GameBoy Pico Components
 from display import Display
 from controller import Controller
+from menu import Menu
 
 # Games
 # from dotgame import DotGame - does not exist yet
 #from tetrisblock import TetrisBlock
 from asyncdebug import AsyncDebug
+from snake import SnakeGame
 
 # Utils
 import time
@@ -54,10 +56,7 @@ controller = Controller()
 # TODO create engine.py and Engine class for movement and animations in games
 
 # menu data
-menu_index = 0
-game_selected = False
-selected_game = 0
-menu_entries = ["1", "2", "3", "4"]
+
 
 # dotgame = DotGame(display, controller) - does not exist yet
 # TODO game class and subclasses for every game
@@ -65,53 +64,7 @@ menu_entries = ["1", "2", "3", "4"]
 
 # Methods
 
-# game selection menu
-def menu():
-    global display
-    global menu_index
-    global game_selected
-    global selected_game
-    global menu_entries
 
-    while not game_selected:
-        display.showtext(menu_entries[menu_index], 0, 1)
-        if (controller.left()):
-            menu_button_left()
-        if (controller.right()):
-            menu_button_right()
-        if (controller.down()):
-            game_selected = True
-
-        time.sleep(0.1) # really necessary?
-        # maybe the menu should only be updated when a button is pressed
-        # so that the menu is less laggy
-
-    return menu_index # selected_game
-# END OF menu()
-
-
-# game selection menu move left
-def menu_button_left():
-    global menu_entries
-    global menu_index
-
-    if (menu_index < 0):
-        menu_index = len(menu_entries) - 1
-    else:
-        menu_index = menu_index - 1
-# END OF menu_button_left()
-
-
-# game sleection menu move right
-def menu_button_right():
-    global menu_entries
-    global menu_index
-
-    if (menu_index > len(menu_entries) - 1):
-        menu_index = 0
-    else:
-        menu_index = menu_index + 1
-# END OF menu_button_right()
 
 # END OF game selection menu
 ################################################################################
@@ -120,27 +73,35 @@ def menu_button_right():
 # runs until the device is killed by physically shut off
 # the print output
 def run():
-    display.splashscreen()
 
-    while True:
-        print("menu")
-        selected_game = menu()
-        print("selected game: " + selected_game)
+    games = [
+        AsyncDebug(display, controller),
+        SnakeGame(display, controller)
+    ]
 
-        if (selected_game == 0):
-            print("dotgame")
-            dotgame()
-        elif (selected_game == 1):
-            print("stackgame")
-            stackgame()
-        elif (selected_game == 2):
-            print("tetris")
-            tetris()
-        elif (selected_game == 3):
-            print("collectgame")
-            collectgame()
-        else:
-            break # restart console when no game is defined for selected_game
+    # display.splashscreen()
+    # game = AsyncDebug(display, controller)
+    # game.run()
+    menu = Menu(display, controller, games)
+    menu.run()
+
+    # while True:
+    #     selected_game = menu()
+
+    #     if (selected_game == 0):
+    #         print("dotgame")
+    #         dotgame()
+    #     elif (selected_game == 1):
+    #         print("stackgame")
+    #         stackgame()
+    #     elif (selected_game == 2):
+    #         print("tetris")
+    #         tetris()
+    #     elif (selected_game == 3):
+    #         print("collectgame")
+    #         collectgame()
+    #     else:
+    #         break # restart console when no game is defined for selected_game
 # END OF run()
 
 
