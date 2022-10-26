@@ -15,6 +15,26 @@ class Snake:
         self.headx = startx
         self.heady = starty
 
+    def move_up(self):
+        self.heady -= 1
+        if self.heady < 0:
+            self.heady = 7
+
+    def move_down(self):
+        self.heady += 1
+        if self.heady > 7:
+            self.heady = 0
+
+    def move_left(self):
+        self.headx -= 1
+        if self.headx < 0:
+            self.headx = 7
+
+    def move_right(self):
+        self.headx += 1
+        if self.headx > 7:
+            self.headx = 0
+        
     def move(self, direction):
         if direction != None:
             #if ((self.direction == 'up'    and direction == 'down' ) or
@@ -24,34 +44,39 @@ class Snake:
             self.direction = direction
 
         if self.direction == 'up':
-            self.heady -= 1
+            self.move_up()
         elif self.direction == 'down':
-            self.heady += 1
+            self.move_down()
         elif self.direction == 'left':
-            self.headx -= 1
+            self.move_left()
         elif self.direction == 'right':
-            self.headx += 1
-
+            self.move_right()
+        print(self.headx, self.heady)
     def lengthen(self):
         self.length += 1
-
-    def die(self):
-        display.fill(1)
-        display.show()
-
 
 class Board:
 
     def __init__(self, snake):
+        # self.state = [
+        #     ['w','w','w','w','w','w','w','w'],
+        #     ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
+        #     ['w', 0 ,'a', 0 , 0 , 0 , 0 ,'w'],
+        #     ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
+        #     ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
+        #     ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
+        #     ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
+        #     ['w','w','w','w','w','w','w','w'],
+        # ]
         self.state = [
-            ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
-            ['w',  0 ,  0 ,  0 ,  0 ,  0 ,  0 , 'w'],
-            ['w',  0 , 'a',  0 ,  0 ,  0 ,  0 , 'w'],
-            ['w',  0 ,  0 ,  0 ,  0 ,  0 ,  0 , 'w'],
-            ['w',  0 ,  0 ,  0 ,  0 ,  0 ,  0 , 'w'],
-            ['w',  0 ,  0 ,  0 ,  0 ,  0 ,  0 , 'w'],
-            ['w',  0 ,  0 ,  0 ,  0 ,  0 ,  0 , 'w'],
-            ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
         ]
         self.snake = snake
         self.state[self.snake.headx][self.snake.heady] = self.snake.length
@@ -81,6 +106,8 @@ class Board:
                     self.state[x][y] -= 1
 
     def debugPrint(self):
+        print("\x1B\x5B2J", end="")
+        print("\x1B\x5BH", end="")
         for y in range(8):
             for x in range(8):
                 print(self.state[x][y], end='')
@@ -90,31 +117,42 @@ class Board:
 
 class SnakeGame:
 
-    def __init__(self):
-        self.controller = Controller()
+    def __init__(self, display, controller):
+        self.display = display
+        self.controller = controller
         self.led = Pin(25, Pin.OUT)
         self.player = Snake(4, 'up', 6, 6)
         self.myBoard = Board(self.player)
+        self.last_button_pressed = None
 
     def loop(self, t):
         self.led.toggle()
 
         self.myBoard.recalculateState()
-        if(self.myBoard.detectCollision()):
-            self.player.die()
-            t.deinit()
+        # if(self.myBoard.detectCollision()):
+        #     self.player.die()
+        #     t.deinit()
 
         #last press
-        lp = self.controller.last_button_pressed
+        lp = self.last_button_pressed
 
         self.player.move(lp)
         self.myBoard.draw()
         self.myBoard.debugPrint()
-        
-        self.controller.reset_press()
 
     def run(self):
         print('starting snake')
+
+        def up_fn(btn_pressed): self.last_button_pressed = 'up'
+        def down_fn(btn_pressed): self.last_button_pressed = 'down'
+        def left_fn(btn_pressed): self.last_button_pressed = 'left'
+        def right_fn(btn_pressed): self.last_button_pressed = 'right'
+
+        self.controller.on_up(up_fn)
+        self.controller.on_down(down_fn)
+        self.controller.on_left(left_fn)
+        self.controller.on_right(right_fn)
+
         self.myBoard.draw()
 
         game_loop_timer = Timer()
