@@ -61,7 +61,11 @@ class Snake:
             self.move_left()
         elif self.direction == 'right':
             self.move_right()
-        
+    
+    def check_next(self):
+        if self.direction == 'up':
+            self.state. headx 
+
     def lengthen(self):
         self.length += 1
 
@@ -69,14 +73,14 @@ class Board:
 
     def __init__(self, snake):
         # self.state = [
-        #     ['w','w','w','w','w','w','w','w'],
-        #     ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
-        #     ['w', 0 ,'a', 0 , 0 , 0 , 0 ,'w'],
-        #     ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
-        #     ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
-        #     ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
-        #     ['w', 0 , 0 , 0 , 0 , 0 , 0 ,'w'],
-        #     ['w','w','w','w','w','w','w','w'],
+        #     [-1,-1,-1,-1,-1,-1,-1,-1],
+        #     [-1, 0, 0, 0, 0, 0, 0,-1],
+        #     [-1, 0, 0, 0, 0, 0, 0,-1],
+        #     [-1, 0, 0, 0, 0, 0, 0,-1],
+        #     [-1, 0, 0, 0, 0, 0, 0,-1],
+        #     [-1, 0, 0, 0, 0, 0, 0,-1],
+        #     [-1, 0, 0, 0, 0, 0, 0,-1],
+        #     [-1,-1,-1,-1,-1,-1,-1,-1],
         # ]
         self.state = [
             [0,0,0,0,0,0,0,0],
@@ -85,7 +89,7 @@ class Board:
             [0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0],
+            [0,-2,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0],
         ]
         self.snake = snake
@@ -101,12 +105,6 @@ class Board:
 
         display.show()
 
-    def detectCollision(self):
-        if (self.state[self.snake.headx][self.snake.heady] != 0):
-            return True
-        else:
-            return False
-    
     def recalculateState(self):
         self.state[self.snake.headx][self.snake.heady] = self.snake.length
         for x in range(8):
@@ -131,17 +129,28 @@ class SnakeGame:
         self.display = display
         self.controller = controller
         self.led = Pin(25, Pin.OUT)
-        self.player = Snake(8, 'up', 6, 6)
+        self.player = Snake(6, 'up', 6, 6)
         self.myBoard = Board(self.player)
         self.last_button_pressed = None
-
+    
+    def detectCollision(self):
+        if (self.myBoard.state[self.player.headx][self.player.heady] < self.player.length and self.myBoard.state[self.player.headx][self.player.heady] != 0):
+            return True
+        else:
+            return False
+    
     def loop(self, t):
         self.led.toggle()
 
+        if(self.detectCollision()):
+            if self.myBoard.state[self.player.headx][self.player.heady] == -2:
+                self.player.lengthen()
+            else:
+                self.display.fill(1)
+                self.display.show()
+                t.deinit()
+            
         self.myBoard.recalculateState()
-        # if(self.myBoard.detectCollision()):
-        #     self.player.die()
-        #     t.deinit()
 
         self.player.move(self.last_button_pressed)
         self.myBoard.draw()
@@ -166,7 +175,7 @@ class SnakeGame:
 
         game_loop_timer = Timer()
         game_loop_timer.init(mode=Timer.PERIODIC,
-                             period=500,
+                             period=250,
                              callback=self.loop)
 
         # led_timer = Timer()
@@ -176,4 +185,5 @@ class SnakeGame:
 if __name__ == "__main__":
     game = SnakeGame(Display(), Controller())
     game.run()
+
 
