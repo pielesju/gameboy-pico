@@ -35,13 +35,22 @@ class Snake:
         if self.headx > 7:
             self.headx = 0
         
-    def move(self, direction):
-        if direction != None:
+    def move(self, new_direction):
+        
+        #don't allow moving the same direction you came from
+        if (self.direction == 'up' and new_direction == 'down' or 
+           self.direction == 'down' and new_direction == 'up' or 
+           self.direction == 'left' and new_direction == 'right' or 
+           self.direction == 'right' and new_direction == 'left'):
+            new_direction = None
+
+
+        if new_direction != None:
             #if ((self.direction == 'up'    and direction == 'down' ) or
             #    (self.direction == 'down'  and direction == 'up'   ) or
             #    (self.direction == 'left'  and direction == 'right') or
             #    (self.direction == 'right' and direction == 'left' )):
-            self.direction = direction
+            self.direction = new_direction
 
         if self.direction == 'up':
             self.move_up()
@@ -51,7 +60,7 @@ class Snake:
             self.move_left()
         elif self.direction == 'right':
             self.move_right()
-        print(self.headx, self.heady)
+        
     def lengthen(self):
         self.length += 1
 
@@ -121,7 +130,7 @@ class SnakeGame:
         self.display = display
         self.controller = controller
         self.led = Pin(25, Pin.OUT)
-        self.player = Snake(4, 'up', 6, 6)
+        self.player = Snake(8, 'up', 6, 6)
         self.myBoard = Board(self.player)
         self.last_button_pressed = None
 
@@ -133,12 +142,11 @@ class SnakeGame:
         #     self.player.die()
         #     t.deinit()
 
-        #last press
-        lp = self.last_button_pressed
-
-        self.player.move(lp)
+        self.player.move(self.last_button_pressed)
         self.myBoard.draw()
         self.myBoard.debugPrint()
+
+        self.last_button_pressed = None
 
     def run(self):
         print('starting snake')
@@ -165,5 +173,6 @@ class SnakeGame:
 
 
 if __name__ == "__main__":
-    game = SnakeGame()
+    game = SnakeGame(Display(), Controller())
     game.run()
+
