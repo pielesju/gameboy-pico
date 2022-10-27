@@ -102,7 +102,6 @@ class Board:
                     display.pixel(x, y, 1)
                 else:
                     display.pixel(x, y, 0)
-
         display.show()
 
     def recalculateState(self):
