@@ -47,6 +47,7 @@ class Snake:
 
         if new_direction != None:
             #if ((self.direction == 'up'    and direction == 'down' ) or
+
             #    (self.direction == 'down'  and direction == 'up'   ) or
             #    (self.direction == 'left'  and direction == 'right') or
             #    (self.direction == 'right' and direction == 'left' )):
