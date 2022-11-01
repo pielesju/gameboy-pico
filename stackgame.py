@@ -1,60 +1,57 @@
+class Board:
+    def __init__(self):
+        self.state = [
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+        ]
 
-def stackgame():
-  global display
-  global controller
+    def draw(self):
+        for x in range(8):
+            for y in range(8):
+                if self.state[x][y] != 0:
+                    display.pixel(x, y, 1)
+                else:
+                    display.pixel(x, y, 0)
+        display.show()
 
-  x = 1
-  y = 6
-  w = 6
+class block:
+    def __init__(self):
+        self.state = [0,0,0,0,1,1,1,1]
+        self.direction = 'left' #one of 'left' or 'right'
 
-  display.fill(0)
-  display.hline(1, 7, 6, 1)
-  display.show()
-  pressed = False
-  lines = [[1, 7, 6]]
-  dir = "l"
-  while True:
-    for l in lines:
-      display.hline(l[0],l[1],l[2],1)
+    def move_left(self):
+        for x in range(8):
+            if self.state[x] == 1:
+                self.state[x-1] = 1
+                
+    def move_right(self):
+        for x in range(8):
+            if self.state[x] == 1:
+                self.state[x+1] = 1
+
+class StackGame:
+    def __init__(self, display, controller):
+        self.display = display
+        self.controller = controller
+        self.led = Pin(25, Pin.OUT)
+
+    def loop(self,t):
+        self.led.toggle()
 
 
-    display.hline(x, y, w, 1)
-    display.show()
-    if(dir == "l"):
-      x = x + 1
-      if x > 8:
-        dir = "r"
+    def run(self):
+        game_loop_timer = Timer()
+        game_loop_timer.init(mode=Timer.PERIODIC,
+                             period=1000,
+                             callback=self.loop)
+if __name__ == "__main__":
+    game = StackGame(Display(), Controller())
+    game.run()
 
-    if(dir == "r"):
-      x = x - 1
-      if x <= 0 - w:
-        dir = "l"
 
-    if(controller.down()):
-      nx = x
-      ny = y
-      nw = w
-
-      """
-      oline = lines[len(lines) - 1]
-      if oline[0] > nx:
-        diff = oline[0] - nx
-        nx = nx + diff
-        wx = wx - diff
-      """
-
-      display.hline(nx, ny, nw, 1)
-      if y < 3:
-        for l in lines:
-          l[1] = l[1] + 1
-        y = y + 1
-
-      display.show()
-      lines.append([x, y, w])
-      x = 1
-      y = y - 1
-      pressed = True
-
-    time.sleep(0.1)
-    display.fill(0)
-# END OF stackgame()
