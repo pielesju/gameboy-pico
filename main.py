@@ -35,6 +35,7 @@ from menu import Menu
 #from tetrisblock import TetrisBlock
 from asyncdebug import AsyncDebug
 from snake import SnakeGame
+from stackgame import StackGame
 
 # Utils
 import time
@@ -76,7 +77,8 @@ def run():
 
     games = [
         AsyncDebug(display, controller),
-        SnakeGame(display, controller)
+        SnakeGame(display, controller),
+        StackGame(display, controller)
     ]
 
     # display.splashscreen()
