@@ -95,16 +95,15 @@ class AsyncDebug:
         def down_fn(btn_pressed): self.last_button_pressed = 'down'
         def left_fn(btn_pressed): self.last_button_pressed = 'left'
         def right_fn(btn_pressed): self.last_button_pressed = 'right'
-        def a_fn(btn_pressed):
-            
-        def b_fn(btn_pressed): self.last_button_pressed = 'right'
+        def a_fn(btn_pressed): self.last_button_pressed = 'a'
+        def b_fn(btn_pressed): self.last_button_pressed = 'b'
         
         self.controller.on_up(up_fn)
         self.controller.on_down(down_fn)
         self.controller.on_left(left_fn)
         self.controller.on_right(right_fn)
-        self.controller.on_a(lambda btn: print('a'))
-        self.controller.on_b(lambda btn: print('b'))
+        self.controller.on_a(a_fn)
+        self.controller.on_b(b_fn)
         
         game_loop_timer = Timer()
         game_loop_timer.init(mode=Timer.PERIODIC, period=1000, callback=self.loop)
