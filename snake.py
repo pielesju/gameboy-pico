@@ -4,9 +4,6 @@ from machine import Timer, Pin
 from display import Display
 from controller import Controller
 
-display = Display()
-
-
 class Snake:
     
     def __init__(self, length, direction, startx, starty):
@@ -95,15 +92,6 @@ class Board:
         self.snake = snake
         self.state[self.snake.headx][self.snake.heady] = self.snake.length
 
-    def draw(self):
-        for x in range(8):
-            for y in range(8):
-                if self.state[x][y] != 0:
-                    display.pixel(x, y, 1)
-                else:
-                    display.pixel(x, y, 0)
-        display.show()
-
     def recalculateState(self):
         self.state[self.snake.headx][self.snake.heady] = self.snake.length
         for x in range(8):
@@ -138,6 +126,15 @@ class SnakeGame:
         else:
             return False
     
+    def draw(self, state):
+        for x in range(8):
+            for y in range(8):
+                if state[x][y] != 0:
+                    self.display.pixel(x, y, 1)
+                else:
+                    self.display.pixel(x, y, 0)
+        self.display.show()
+    
     def loop(self, t):
         self.led.toggle()
 
@@ -152,7 +149,7 @@ class SnakeGame:
         self.myBoard.recalculateState()
 
         self.player.move(self.last_button_pressed)
-        self.myBoard.draw()
+        self.draw(self.myBoard.state)
         self.myBoard.debugPrint()
 
         self.last_button_pressed = None
@@ -164,13 +161,17 @@ class SnakeGame:
         def down_fn(btn_pressed): self.last_button_pressed = 'down'
         def left_fn(btn_pressed): self.last_button_pressed = 'left'
         def right_fn(btn_pressed): self.last_button_pressed = 'right'
+        def a_fn(btn_pressed): self.last_button_pressed = 'a'
+        def b_fn(btn_pressed): self.last_button_pressed = 'b'
 
         self.controller.on_up(up_fn)
         self.controller.on_down(down_fn)
         self.controller.on_left(left_fn)
         self.controller.on_right(right_fn)
+        self.controller.on_a(a_fn)
+        self.controller.on_b(b_fn)
 
-        self.myBoard.draw()
+        self.draw(self.myBoard.state)
 
         game_loop_timer = Timer()
         game_loop_timer.init(mode=Timer.PERIODIC,
