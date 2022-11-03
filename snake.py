@@ -1,11 +1,12 @@
 import time
+import machine
 from button import Button
 from machine import Timer, Pin
 from display import Display
 from controller import Controller
 
 class Snake:
-    
+
     def __init__(self, length, direction, startx, starty):
         self.length = length
         self.direction = direction  #one of 'up', 'down', 'left', 'right'
@@ -31,13 +32,12 @@ class Snake:
         self.headx += 1
         if self.headx > 7:
             self.headx = 0
-        
+
     def move(self, new_direction):
-        
         #don't allow moving the same direction you came from
-        if (self.direction == 'up' and new_direction == 'down' or 
-           self.direction == 'down' and new_direction == 'up' or 
-           self.direction == 'left' and new_direction == 'right' or 
+        if (self.direction == 'up' and new_direction == 'down' or
+           self.direction == 'down' and new_direction == 'up' or
+           self.direction == 'left' and new_direction == 'right' or
            self.direction == 'right' and new_direction == 'left'):
             new_direction = None
 
@@ -58,10 +58,10 @@ class Snake:
             self.move_left()
         elif self.direction == 'right':
             self.move_right()
-    
+
     def check_next(self):
         if self.direction == 'up':
-            self.state. headx 
+            self.state. headx
 
     def lengthen(self):
         self.length += 1
@@ -115,17 +115,18 @@ class SnakeGame:
     def __init__(self, display, controller):
         self.display = display
         self.controller = controller
+        self.game_loop_timer = Timer()
         self.led = Pin(25, Pin.OUT)
         self.player = Snake(6, 'up', 6, 6)
         self.myBoard = Board(self.player)
         self.last_button_pressed = None
-    
+
     def detectCollision(self):
         if (self.myBoard.state[self.player.headx][self.player.heady] < self.player.length and self.myBoard.state[self.player.headx][self.player.heady] != 0):
             return True
         else:
             return False
-    
+
     def draw(self, state):
         for x in range(8):
             for y in range(8):
@@ -134,7 +135,25 @@ class SnakeGame:
                 else:
                     self.display.pixel(x, y, 0)
         self.display.show()
-    
+
+    def lose(self):
+        self.display.fill(1)
+        self.display.show()
+        time.sleep_ms(100)
+        self.draw(self.myBoard.state)
+        time.sleep_ms(100)
+        self.display.fill(1)
+        self.display.show()
+        time.sleep_ms(100)
+        self.draw(self.myBoard.state)
+        time.sleep_ms(100)
+        self.display.fill(1)
+        self.display.show()
+        time.sleep_ms(100)
+
+        self.game_loop_timer.deinit()
+        machine.reset()
+
     def loop(self, t):
         self.led.toggle()
 
@@ -142,10 +161,8 @@ class SnakeGame:
             if self.myBoard.state[self.player.headx][self.player.heady] == -2:
                 self.player.lengthen()
             else:
-                self.display.fill(1)
-                self.display.show()
-                t.deinit()
-            
+                self.lose()
+
         self.myBoard.recalculateState()
 
         self.player.move(self.last_button_pressed)
@@ -162,7 +179,7 @@ class SnakeGame:
         def left_fn(btn_pressed): self.last_button_pressed = 'left'
         def right_fn(btn_pressed): self.last_button_pressed = 'right'
         def a_fn(btn_pressed): self.last_button_pressed = 'a'
-        def b_fn(btn_pressed): self.last_button_pressed = 'b'
+        def b_fn(btn_pressed): machine.reset()
 
         self.controller.on_up(up_fn)
         self.controller.on_down(down_fn)
@@ -173,8 +190,8 @@ class SnakeGame:
 
         self.draw(self.myBoard.state)
 
-        game_loop_timer = Timer()
-        game_loop_timer.init(mode=Timer.PERIODIC,
+
+        self.game_loop_timer.init(mode=Timer.PERIODIC,
                              period=250,
                              callback=self.loop)
 

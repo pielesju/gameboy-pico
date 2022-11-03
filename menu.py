@@ -1,7 +1,6 @@
 from display import Display
 from controller import Controller
 from machine import Timer
-import time
 
 class Menu:
     def __init__(self, display, controller, games):
@@ -16,7 +15,7 @@ class Menu:
         if self.index >= len(self.entries):
             self.index = 0
         self.display.showtext(str(self.index+1), 0, 1)
-    
+
     def previous_entry(self):
         self.index -= 1
         if self.index < 0:
