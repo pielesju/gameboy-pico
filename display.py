@@ -17,6 +17,7 @@ class Display:
         self.text = display.text
         self.scroll = display.scroll
         self.show = display.show
+        self.blit = display.blit
     # END OF __init__
 
 
