@@ -36,6 +36,7 @@ from menu import Menu
 from asyncdebug import AsyncDebug
 from snake import SnakeGame
 from stackgame import StackGame
+from paint import PaintGame
 
 # Utils
 import time
@@ -78,7 +79,8 @@ def run():
     games = [
         AsyncDebug(display, controller),
         SnakeGame(display, controller),
-        StackGame(display, controller)
+        StackGame(display, controller),
+        PaintGame(display, controller)
     ]
 
     # display.splashscreen()
