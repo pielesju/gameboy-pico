@@ -33,10 +33,6 @@ from menu import Menu
 # Games
 # from dotgame import DotGame - does not exist yet
 #from tetrisblock import TetrisBlock
-from asyncdebug import AsyncDebug
-from snake import SnakeGame
-from stackgame import StackGame
-from paint import PaintGame
 
 # Utils
 import time
@@ -48,27 +44,10 @@ from machine import Timer
 
 ################################################################################
 
-# Variables
-
 # device drivers
 display = Display()
 controller = Controller()
 
-# engine
-# TODO create engine.py and Engine class for movement and animations in games
-
-# menu data
-
-
-# dotgame = DotGame(display, controller) - does not exist yet
-# TODO game class and subclasses for every game
-
-
-# Methods
-
-
-
-# END OF game selection menu
 ################################################################################
 
 # Main Method
@@ -76,38 +55,9 @@ controller = Controller()
 # the print output
 def run():
 
-    games = [
-        AsyncDebug(display, controller),
-        SnakeGame(display, controller),
-        StackGame(display, controller),
-        PaintGame(display, controller)
-    ]
-
-    # display.splashscreen()
-    # game = AsyncDebug(display, controller)
-    # game.run()
-    menu = Menu(display, controller, games)
+    display.splashscreen()
+    menu = Menu(display, controller)
     menu.run()
-
-    # while True:
-    #     selected_game = menu()
-
-    #     if (selected_game == 0):
-    #         print("dotgame")
-    #         dotgame()
-    #     elif (selected_game == 1):
-    #         print("stackgame")
-    #         stackgame()
-    #     elif (selected_game == 2):
-    #         print("tetris")
-    #         tetris()
-    #     elif (selected_game == 3):
-    #         print("collectgame")
-    #         collectgame()
-    #     else:
-    #         break # restart console when no game is defined for selected_game
-# END OF run()
-
 
 #  finally running the program
 # this should be the only method running in the class

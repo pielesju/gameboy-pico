@@ -57,32 +57,35 @@ class Row:
 
 
 class StackGame:
-    def __init__(self, display, controller):
+    def __init__(self, display, controller, menu):
         self.display = display
         self.controller = controller
+        self.menu = menu
         self.led = Pin(25, Pin.OUT)
         self.board = Board()
         self.row = Row()
-        self.tower_height = 0
-        self.tower_height_offset = 0
+        self.gameLoopTimer = Timer()
+        self.towerHeight = 0
+        self.towerHeightOffset = 0
 
-    def draw(self, state):
+    def draw(self):
+        state = (self.board.state + [self.row.state])[self.towerHeightOffset:self.towerHeight+1]
         for y in range(8):
             for x in range(8):
                 try:
-                    self.display.pixel(y, -x+7, state[x][y]) # withuot -x+7 the game will be upside down
+                    self.display.pixel(x, -y+7, state[y][x]) # withuot -y+7 the game will be upside down
                 except IndexError:
-                    self.display.pixel(y, -x+7, 0)
+                    self.display.pixel(x, -y+7, 0)
         self.display.show()
 
     def drop(self):
 
         previous_row = list()
 
-        if self.tower_height == 0:
+        if self.towerHeight == 0:
             previous_row = [1,1,1,1,1,1,1,1]
         else:
-            previous_row = self.board.state[self.tower_height-1]
+            previous_row = self.board.state[self.towerHeight-1]
 
         current_row = self.row.state.copy()
 
@@ -99,41 +102,45 @@ class StackGame:
 
         self.row.state = after_row
 
-        self.tower_height += 1
-        if self.tower_height >= 7:
-            self.tower_height_offset += 1
+        self.towerHeight += 1
+        if self.towerHeight >= 7:
+            self.towerHeightOffset += 1
 
 
-        self.draw((self.board.state + [self.row.state])[self.tower_height_offset:self.tower_height+1])
+        self.draw()
 
     def lose(self):
+        self.gameLoopTimer.deinit()
         self.display.fill(1)
         self.display.show()
         time.sleep_ms(100)
-        self.draw((self.board.state + [self.row.state])[self.tower_height_offset:self.tower_height+1])
-        time.sleep_ms(100)
-        self.display.fill(1)
-        self.display.show()
-        time.sleep_ms(100)
-        self.draw((self.board.state + [self.row.state])[self.tower_height_offset:self.tower_height+1])
+        self.draw()
         time.sleep_ms(100)
         self.display.fill(1)
         self.display.show()
         time.sleep_ms(100)
+        self.draw()
+        time.sleep_ms(100)
+        self.display.fill(1)
+        self.display.show()
+        time.sleep_ms(100)
+        self.draw()
 
-        machine.reset()
+        self.exit()
+
+    def exit(self):
+        self.menu.stop_running_game()
 
     def loop(self,t):
         self.led.toggle()
         print("\x1B\x5B2J", end="")
         print("\x1B\x5BH", end="")
         print(self.board.state + [self.row.state])
-        print(str(self.tower_height_offset) + ':' + str(self.tower_height))
+        print(str(self.towerHeightOffset) + ':' + str(self.towerHeight))
 
         self.row.move()
-        # self.board.state[self.tower_height] = self.row.state.copy()
-        # self.draw(self.board.state[self.tower_height_offset:self.tower_height])
-        self.draw((self.board.state + [self.row.state])[self.tower_height_offset:self.tower_height+1])
+
+        self.draw()
 
 
 
@@ -145,7 +152,7 @@ class StackGame:
         def left_fn(btn_pressed):  print('left')
         def right_fn(btn_pressed): print('right')
         def a_fn(btn_pressed):     print('a')
-        def b_fn(btn_pressed):     machine.reset()
+        def b_fn(btn_pressed):     self.exit()
 
         self.controller.on_up(up_fn)
         self.controller.on_down(down_fn)
@@ -157,10 +164,9 @@ class StackGame:
         self.display.fill(0)
         self.display.show()
 
-        game_loop_timer = Timer()
-        game_loop_timer.init(mode=Timer.PERIODIC,
-                             period=200,
-                             callback=self.loop)
+        self.gameLoopTimer.init(mode=Timer.PERIODIC,
+                                period=200,
+                                callback=self.loop)
 if __name__ == "__main__":
     game = StackGame(Display(), Controller())
     game.run()
