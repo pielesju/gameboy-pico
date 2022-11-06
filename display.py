@@ -23,15 +23,11 @@ class Display:
 
     def splashscreen(self):
         self.showtext("G", 0, 1)
-        time.sleep(0.8)
+        time.sleep(0.3)
         self.showtext("B", 0, 1)
-        time.sleep(0.8)
+        time.sleep(0.3)
         self.showtext("P", 0, 1)
-        time.sleep(0.8)
-        self.fill(0)
-        self.show()
-        #self.reset()
-        time.sleep(1)
+        time.sleep(0.3)
     # END OF splashscreen()
 
 
@@ -53,6 +49,10 @@ class Display:
         self.show()
     # END OF clock()
 
+    def toggle_pixel(self, x, y):
+        pixel_value = self.pixel(x,y)
+        self.pixel(x, y, pixel_value ^ 1)
+        self.show()
 
     def showpixel(self, x, y):
         self.fill(0)
