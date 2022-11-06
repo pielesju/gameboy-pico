@@ -6,11 +6,13 @@ from display import Display
 from controller import Controller
 
 class AsyncDebug:
-    def __init__(self, display, controller):
+    def __init__(self, display, controller, menu):
         self.display = display
         self.controller = controller
+        self.menu = menu
+        self.gameLoopTimer = Timer()
         self.led = Pin(25, Pin.OUT)
-        self.last_button_pressed = None
+        self.lastButtonPressed = None
 
         self.up_image = [
             [0,0,0,1,1,0,0,0],
@@ -66,18 +68,19 @@ class AsyncDebug:
 
     def draw(self, direction):
         state = direction
-        for x in range(8):
-            for y in range(8):
-                if state[x][y] != 0:
+        for y in range(8):
+            for x in range(8):
+                if state[y][x] != 0:
                     self.display.pixel(x, y, 1)
                 else:
                     self.display.pixel(x, y, 0)
+        self.display.show()
 
     def loop(self, t):
         self.led.toggle()
 
         #last press
-        lp = self.last_button_pressed
+        lp = self.lastButtonPressed
 
         print('last_press: ', lp)
 
@@ -86,17 +89,20 @@ class AsyncDebug:
         elif (lp == 'left'): self.draw(self.left_image)
         elif (lp == 'right'): self.draw(self.right_image)
         else: self.draw(self.empty)
+        
+        self.lastButtonPressed = None
 
-        self.display.show()
-        self.last_button_pressed = None
+    def exit(self):
+        self.gameLoopTimer.deinit()
+        self.menu.stop_running_game()
 
     def run(self):
-        def up_fn(btn_pressed): self.last_button_pressed = 'up'
-        def down_fn(btn_pressed): self.last_button_pressed = 'down'
-        def left_fn(btn_pressed): self.last_button_pressed = 'left'
-        def right_fn(btn_pressed): self.last_button_pressed = 'right'
-        def a_fn(btn_pressed): self.last_button_pressed = 'a'
-        def b_fn(btn_pressed): machine.reset()
+        def up_fn(btn_pressed):    self.lastButtonPressed = 'up'
+        def down_fn(btn_pressed):  self.lastButtonPressed = 'down'
+        def left_fn(btn_pressed):  self.lastButtonPressed = 'left'
+        def right_fn(btn_pressed): self.lastButtonPressed = 'right'
+        def a_fn(btn_pressed):     self.lastButtonPressed = 'a'
+        def b_fn(btn_pressed):     self.exit()
 
         self.controller.on_up(up_fn)
         self.controller.on_down(down_fn)
@@ -105,8 +111,7 @@ class AsyncDebug:
         self.controller.on_a(a_fn)
         self.controller.on_b(b_fn)
 
-        game_loop_timer = Timer()
-        game_loop_timer.init(mode=Timer.PERIODIC, period=1000, callback=self.loop)
+        self.gameLoopTimer.init(mode=Timer.PERIODIC, period=1000, callback=self.loop)
 
         # led_timer = Timer()
         # led_timer.init(mode=Timer.PERIODIC, period=250, callback=lambda t:led.toggle())
