@@ -230,8 +230,8 @@ class SnakeGame:
         del self.snake
         self.snake = self.snake = Snake(3, 'up', 6, 6)
         self.gameLoopTimer.init(mode=Timer.PERIODIC,
-                        period=250,
-                        callback=self.loop)
+                                period=250,
+                                callback=self.loop)
 
     def exit(self):
         self.gameLoopTimer.deinit()
@@ -253,7 +253,7 @@ class SnakeGame:
         while True:
             x = random.randint(0,7)
             y = random.randint(0,7)
-            if (self.board.state[y][x] == 0 or self.snake.state[y][x] == 0):
+            if (not (self.board.state[y][x] or self.snake.state[y][x])):
                 break
         self.food.place_food(x,y)
 
