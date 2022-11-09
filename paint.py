@@ -52,15 +52,11 @@ class Brush:
         if self.x > 7:
             self.x = 0
 
-class PaintGame:
+class PaintGame(Game):
     def __init__(self, display, controller, menu):
-        self.display = display
-        self.controller = controller
-        self.menu = menu
-        self.led = Pin(25, Pin.OUT)
+        Game.__init__(self, display, controller, menu) # pass parameters into parent class
         self.canvas = Canvas()
         self.brush = Brush()
-        self.blinkTimer = Timer()
         self.movedLastTick = False
 
     def move(self, direction):
@@ -76,24 +72,11 @@ class PaintGame:
             return
         self.movedLastTick = True
 
-    def draw(self, state):
-        for y in range(8):
-            for x in range(8):
-                try:
-                    self.display.pixel(x, y, state[y][x]) # withuot -x+7 the game will be upside down
-                except IndexError:
-                    self.display.pixel(x, y, 0)
-        self.display.show()
-
     def blink(self, t):
         self.display.toggle_pixel(self.brush.x, self.brush.y)
         if self.movedLastTick:
             self.draw(self.canvas.state)
             self.movedLastTick = False
-
-    def exit(self):
-        self.blinkTimer.deinit()
-        self.menu.stop_running_game()
 
     def run(self):
         print('starting paint')
@@ -118,12 +101,16 @@ class PaintGame:
         self.display.fill(0)
         self.display.show()
 
-        self.blinkTimer.init(mode=Timer.PERIODIC,
-                              period=250,
-                              callback=self.blink)
+        self.gameLoop.init(mode=Timer.PERIODIC,
+                           period=250,
+                           callback=self.blink)
 
 if __name__ == "__main__":
-    game = PaintGame(Display(), Controller())
+    display = Display()
+    controller = Controller()
+    menu = Menu(display, controller)
+
+    game = PaintGame(display, controller, menu)
     game.run()
 
 
