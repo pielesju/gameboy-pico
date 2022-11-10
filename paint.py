@@ -1,6 +1,7 @@
 from display import Display
 from controller import Controller
 from machine import Timer, Pin
+from game import Game
 import machine
 import time
 import framebuf
