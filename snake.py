@@ -5,6 +5,7 @@ from button import Button
 from machine import Timer, Pin
 from display import Display
 from controller import Controller
+from game import Game
 
 class Food:
     def __init__(self):
@@ -167,12 +168,12 @@ class Board:
                 [1,1,1,1,1,1,1,1]
             ]
         ]
-    
+
     def set_next_level(self):
         self.index += 1
         if self.index >= len(self.levels):
             self.index = 0
-    
+
     def set_random_level(self):
         self.index = random.randint(0, len(self.levels) - 1)
 
@@ -180,13 +181,9 @@ class Board:
     def state(self):
         return self.levels[self.index]
 
-class SnakeGame:
+class SnakeGame(Game):
     def __init__(self, display, controller, menu):
-        self.menu = menu
-        self.display = display
-        self.controller = controller
-        self.gameLoopTimer = Timer()
-        self.led = Pin(25, Pin.OUT)
+        self.gameLoop = Timer()
         self.snake = Snake(3, 'up', 6, 6)
         self.board = Board(self.snake)
         self.food = Food()
@@ -201,17 +198,17 @@ class SnakeGame:
             print('')
         print('')
 
-    def draw(self):
-        for y in range(8):
-            for x in range(8):
-                if self.board.state[y][x] or self.snake.state[y][x] or self.food.state[y][x] != 0:
-                    self.display.pixel(x, y, 1)
-                else:
-                    self.display.pixel(x, y, 0)
-        self.display.show()
+    # def draw(self):
+    #     for y in range(8):
+    #         for x in range(8):
+    #             if self.board.state[y][x] or self.snake.state[y][x] or self.food.state[y][x] != 0:
+    #                 self.display.pixel(x, y, 1)
+    #             else:
+    #                 self.display.pixel(x, y, 0)
+    #     self.display.show()
 
     def lose(self):
-        self.gameLoopTimer.deinit()
+        self.gameLoop.deinit()
         self.display.fill(1)
         self.display.show()
         time.sleep_ms(100)
@@ -229,12 +226,12 @@ class SnakeGame:
 
         del self.snake
         self.snake = self.snake = Snake(3, 'up', 6, 6)
-        self.gameLoopTimer.init(mode=Timer.PERIODIC,
+        self.gameLoop.init(mode=Timer.PERIODIC,
                                 period=250,
                                 callback=self.loop)
 
     def exit(self):
-        self.gameLoopTimer.deinit()
+        self.gameLoop.deinit()
         self.menu.stop_running_game()
 
     def detect_collision(self):
@@ -286,11 +283,11 @@ class SnakeGame:
         self.controller.on_right(right_fn)
         self.controller.on_a(a_fn)
         self.controller.on_b(b_fn)
-        
+
         self.generate_food()
         self.draw()
 
-        self.gameLoopTimer.init(mode=Timer.PERIODIC,
+        self.gameLoop.init(mode=Timer.PERIODIC,
                                 period=250,
                                 callback=self.loop)
 
