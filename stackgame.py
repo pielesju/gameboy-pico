@@ -1,6 +1,7 @@
 from display import Display
 from controller import Controller
 from machine import Timer, Pin
+from game import Game
 import machine
 import time
 
@@ -105,6 +106,7 @@ class StackGame(Game):
         self.draw()
 
     def lose(self):
+        self.gameLoop.deinit()
         self.display.fill(1)
         self.display.show()
         time.sleep_ms(100)
@@ -120,7 +122,12 @@ class StackGame(Game):
         time.sleep_ms(100)
         self.draw()
 
-        self.exit()
+        del self.snake
+        self.snake = self.snake = Snake(3, 'up', 6, 6)
+        self.gameLoop.init(mode=Timer.PERIODIC,
+                                period=250,
+                                callback=self.loop)
+
 
     def loop(self,t):
         self.led.toggle()
