@@ -24,6 +24,3 @@ class Game:
     def exit(self):
         self.gameLoop.deinit()
         self.menu.stop_running_game()
-
-    def test(self):
-        print('hello test')
