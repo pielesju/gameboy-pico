@@ -122,8 +122,6 @@ class StackGame(Game):
         time.sleep_ms(100)
         self.draw()
 
-        del self.snake
-        self.snake = self.snake = Snake(3, 'up', 6, 6)
         self.gameLoop.init(mode=Timer.PERIODIC,
                                 period=250,
                                 callback=self.loop)
