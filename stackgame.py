@@ -56,15 +56,10 @@ class Row:
 
 
 
-class StackGame:
+class StackGame(Game):
     def __init__(self, display, controller, menu):
-        self.display = display
-        self.controller = controller
-        self.menu = menu
-        self.led = Pin(25, Pin.OUT)
         self.board = Board()
         self.row = Row()
-        self.gameLoopTimer = Timer()
         self.towerHeight = 0
         self.towerHeightOffset = 0
 
@@ -110,7 +105,6 @@ class StackGame:
         self.draw()
 
     def lose(self):
-        self.gameLoopTimer.deinit()
         self.display.fill(1)
         self.display.show()
         time.sleep_ms(100)
@@ -127,9 +121,6 @@ class StackGame:
         self.draw()
 
         self.exit()
-
-    def exit(self):
-        self.menu.stop_running_game()
 
     def loop(self,t):
         self.led.toggle()
@@ -164,11 +155,9 @@ class StackGame:
         self.display.fill(0)
         self.display.show()
 
-        self.gameLoopTimer.init(mode=Timer.PERIODIC,
+        self.gameLoop.init(mode=Timer.PERIODIC,
                                 period=200,
                                 callback=self.loop)
 if __name__ == "__main__":
     game = StackGame(Display(), Controller())
     game.run()
-
-
