@@ -59,6 +59,7 @@ class Row:
 
 class StackGame(Game):
     def __init__(self, display, controller, menu):
+        Game.__init__(self, display, controller, menu) # pass parameters into parent class
         self.board = Board()
         self.row = Row()
         self.towerHeight = 0
@@ -122,9 +123,17 @@ class StackGame(Game):
         time.sleep_ms(100)
         self.draw()
 
+        self.board.state = []
+        self.row.state = [0,0,0,0,1,1,1,1]
+        self.row.direction = 'left' #one of 'left' or 'right'
+        self.row.length = 4
+        self.towerHeight = 0
+        self.towerHeightOffset = 0
+
         self.gameLoop.init(mode=Timer.PERIODIC,
                                 period=250,
                                 callback=self.loop)
+
 
 
     def loop(self,t):
