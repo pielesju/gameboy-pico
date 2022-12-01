@@ -7,10 +7,10 @@ from button import Button
 
 class Controller:
     def __init__(self):
-        self.button_up = Button(16)
-        self.button_down = Button(19)
-        self.button_left = Button(18)
-        self.button_right = Button(15)
+        self.button_up = Button(15)
+        self.button_down = Button(8)
+        self.button_left = Button(10)
+        self.button_right = Button(13)
         self.button_a = Button(11)
         self.button_b = Button(9)
 
