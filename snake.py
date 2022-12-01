@@ -183,6 +183,7 @@ class Board:
 
 class SnakeGame(Game):
     def __init__(self, display, controller, menu):
+        Game.__init__(self, display, controller, menu) # pass parameters into parent class
         self.gameLoop = Timer()
         self.snake = Snake(3, 'up', 6, 6)
         self.board = Board(self.snake)
