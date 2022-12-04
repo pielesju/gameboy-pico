@@ -199,31 +199,25 @@ class SnakeGame(Game):
             print('')
         print('')
 
-    def draw(self):
-        for y in range(8):
-            for x in range(8):
-                if self.board.state[y][x] or self.snake.state[y][x] or self.food.state[y][x] != 0:
-                    self.display.pixel(x, y, 1)
-                else:
-                    self.display.pixel(x, y, 0)
-        self.display.show()
-
     def lose(self):
         self.gameLoop.deinit()
+
+        freezeState = self.addStates([self.board.state, self.snake.state, self.food.state])
+
         self.display.fill(1)
         self.display.show()
         time.sleep_ms(100)
-        self.draw()
+        self.draw(freezeState)
         time.sleep_ms(100)
         self.display.fill(1)
         self.display.show()
         time.sleep_ms(100)
-        self.draw()
+        self.draw(freezeState)
         time.sleep_ms(100)
         self.display.fill(1)
         self.display.show()
         time.sleep_ms(100)
-        self.draw()
+        self.draw(freezeState)
 
         del self.snake
         self.snake = self.snake = Snake(3, 'up', 6, 6)
@@ -259,7 +253,9 @@ class SnakeGame(Game):
         self.led.toggle()
 
         self.snake.move(self.lastButtonPressed)
-        self.draw()
+        self.draw(
+            self.addStates([self.board.state, self.snake.state, self.food.state])
+        )
 
         if(self.detect_collision()):
             self.lose()
@@ -286,7 +282,10 @@ class SnakeGame(Game):
         self.controller.on_b(b_fn)
 
         self.generate_food()
-        self.draw()
+
+        self.draw(
+            self.addStates([self.board.state, self.snake.state, self.food.state])
+        )
 
         self.gameLoop.init(mode=Timer.PERIODIC,
                                 period=250,
