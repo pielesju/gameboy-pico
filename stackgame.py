@@ -7,15 +7,29 @@ import time
 
 class Board:
     def __init__(self):
-        self.state = []
+        self.fullState = []
+        self.towerHeight = 0
+        self.towerHeightOffset = 0
 
     def add_row(self, row):
-        self.state.append(row)
+        self.fullState.append(row)
+
+        self.towerHeight += 1
+        if self.towerHeight >= 7:
+            self.towerHeightOffset += 1
+
+    @property
+    def state(self):
+        section = self.fullState[self.towerHeightOffset:self.towerHeight]
+        section.extend([[0,0,0,0,0,0,0,0]]*8)
+        state = section[0:8]
+        state.reverse()
+        return state
 
     def debugPrint(self):
         print("\x1B\x5B2J", end="")
         print("\x1B\x5BH", end="")
-        print(self.state)
+        print(self.fullState)
         for y in range(8):
             for x in range(8):
                 try:
@@ -30,7 +44,6 @@ class Row:
     def __init__(self):
         self.state = [0,0,0,0,1,1,1,1]
         self.direction = 'left' #one of 'left' or 'right'
-        self.length = 4
 
     def move_left(self):
         self.state.append(self.state.pop(0))
@@ -62,27 +75,46 @@ class StackGame(Game):
         Game.__init__(self, display, controller, menu) # pass parameters into parent class
         self.board = Board()
         self.row = Row()
-        self.towerHeight = 0
-        self.towerHeightOffset = 0
+        self.LOOP_SPEED = 400
 
-    def draw(self):
-        state = (self.board.state + [self.row.state])[self.towerHeightOffset:self.towerHeight+1]
-        for y in range(8):
-            for x in range(8):
-                try:
-                    self.display.pixel(x, -y+7, state[y][x]) # withuot -y+7 the game will be upside down
-                except IndexError:
-                    self.display.pixel(x, -y+7, 0)
-        self.display.show()
+    @property
+    def state(self):
+        bottom_padding = self.board.towerHeight - self.board.towerHeightOffset
+        top_padding = 7 - bottom_padding
+        return self.addStates([
+            self.board.state,
+            [[0,0,0,0,0,0,0,0]] * top_padding +
+            [self.row.state] +
+            [[0,0,0,0,0,0,0,0]] * bottom_padding
+        ])
+
+    # def draw(self):
+    #     bottom_padding = self.board.towerHeight - self.board.towerHeightOffset
+    #     top_padding = 7 - bottom_padding
+
+    #     state =  self.addStates([
+    #         self.board.state,
+    #         [[0,0,0,0,0,0,0,0]] * top_padding +
+    #         [self.row.state] +
+    #         [[0,0,0,0,0,0,0,0]] * bottom_padding
+    #     ])
+
+    #     for y in range(8):
+    #         for x in range(8):
+    #             try:
+    #                 self.display.pixel(x, y, state[y][x]) # without -y+7 the game will be upside down
+    #             except IndexError:
+    #                 self.display.pixel(x, y, 0)
+    #     self.display.show()
 
     def drop(self):
 
         previous_row = list()
 
-        if self.towerHeight == 0:
+        if self.board.towerHeight == 0:
             previous_row = [1,1,1,1,1,1,1,1]
         else:
-            previous_row = self.board.state[self.towerHeight-1]
+            previous_row = self.board.fullState[-1]
 
         current_row = self.row.state.copy()
 
@@ -99,55 +131,51 @@ class StackGame(Game):
 
         self.row.state = after_row
 
-        self.towerHeight += 1
-        if self.towerHeight >= 7:
-            self.towerHeightOffset += 1
-
-
-        self.draw()
+        self.draw(self.state)
 
     def lose(self):
         self.gameLoop.deinit()
-        self.display.fill(1)
-        self.display.show()
-        time.sleep_ms(100)
-        self.draw()
-        time.sleep_ms(100)
-        self.display.fill(1)
-        self.display.show()
-        time.sleep_ms(100)
-        self.draw()
-        time.sleep_ms(100)
-        self.display.fill(1)
-        self.display.show()
-        time.sleep_ms(100)
-        self.draw()
 
-        self.board.state = []
+        freezeState = self.state
+        self.display.fill(1)
+        self.display.show()
+        time.sleep_ms(100)
+        self.draw(freezeState)
+        time.sleep_ms(100)
+        self.display.fill(1)
+        self.display.show()
+        time.sleep_ms(100)
+        self.draw(freezeState)
+        time.sleep_ms(100)
+        self.display.fill(1)
+        self.display.show()
+        time.sleep_ms(100)
+        self.draw(freezeState)
+
+        self.board.fullState = []
         self.row.state = [0,0,0,0,1,1,1,1]
         self.row.direction = 'left' #one of 'left' or 'right'
-        self.row.length = 4
-        self.towerHeight = 0
-        self.towerHeightOffset = 0
+        self.board.towerHeight = 0
+        self.board.towerHeightOffset = 0
 
         self.gameLoop.init(mode=Timer.PERIODIC,
-                                period=250,
-                                callback=self.loop)
+                           period=self.LOOP_SPEED,
+                           callback=self.loop)
 
-
+    def debugPrint(self):
+        print("\x1B\x5B2J", end="")
+        print("\x1B\x5BH", end="")
+        print(self.state)
+        print(str(self.board.towerHeight) + ':' + str(self.board.towerHeightOffset))
 
     def loop(self,t):
         self.led.toggle()
-        print("\x1B\x5B2J", end="")
-        print("\x1B\x5BH", end="")
-        print(self.board.state + [self.row.state])
-        print(str(self.towerHeightOffset) + ':' + str(self.towerHeight))
+
+        self.debugPrint()
 
         self.row.move()
 
-        self.draw()
-
-
+        self.draw(self.state)
 
     def run(self):
         print('starting stack')
@@ -170,8 +198,8 @@ class StackGame(Game):
         self.display.show()
 
         self.gameLoop.init(mode=Timer.PERIODIC,
-                                period=200,
-                                callback=self.loop)
+                           period=self.LOOP_SPEED,
+                           callback=self.loop)
 if __name__ == "__main__":
     game = StackGame(Display(), Controller())
     game.run()
