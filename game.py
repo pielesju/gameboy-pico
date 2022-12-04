@@ -35,3 +35,23 @@ class Game:
     def exit(self):
         self.gameLoop.deinit()
         self.menu.stop_running_game()
+
+    def addStates(self, args):
+
+        union = [
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0]
+        ]
+
+        for z in range(len(args)):
+            for y in range(8):
+                for x in range(8):
+                    union[y][x] = args[z][y][x] or union[y][x]
+
+        return union
