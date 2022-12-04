@@ -31,7 +31,6 @@ class Display:
         self.blit = display.blit
     # END OF __init__
 
-
     def splashscreen(self):
         self.showtext("G", 0, 1)
         time.sleep(0.3)
@@ -39,47 +38,13 @@ class Display:
         time.sleep(0.3)
         self.showtext("P", 0, 1)
         time.sleep(0.3)
-    # END OF splashscreen()
-
-
-    def clock(self):
-        self.fill(0)
-        self.pixel(3, 1, 1)
-        self.pixel(4, 1, 1)
-        self.pixel(2, 2, 1)
-        self.pixel(5, 2, 1)
-        self.pixel(1, 3, 1)
-        self.pixel(6, 3, 1)
-        self.pixel(1, 4, 1)
-        self.pixel(6, 4, 1)
-        self.pixel(2, 5, 1)
-        self.pixel(5, 5, 1)
-        self.pixel(3, 6, 1)
-        self.pixel(4, 6, 1)
-        self.pixel(3, 3, 1)
-        self.show()
-    # END OF clock()
 
     def toggle_pixel(self, x, y):
         pixel_value = self.pixel(x,y)
         self.pixel(x, y, pixel_value ^ 1)
         self.show()
 
-    def showpixel(self, x, y):
-        self.fill(0)
-        self.pixel(x, y, 1)
-        self.show()
-    # END OF showpixel()
-
-
     def showtext(self, text, x, y):
         self.fill(0)
         self.text(text, x, y)
         self.show()
-    # END OF showtext()
-
-
-    def reset():
-        self.fill(0)
-        self.show()
-    # END OF reset()
