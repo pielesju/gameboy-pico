@@ -1,3 +1,12 @@
+#             dP                     dP
+#             88                     88
+#  .d8888b. d8888P .d8888b. .d8888b. 88  .dP  .d8888b. .d8888b. 88d8b.d8b. .d8888b.    88d888b. dP    dP
+#  Y8ooooo.   88   88'  `88 88'  `"" 88888"   88'  `88 88'  `88 88'`88'`88 88ooood8    88'  `88 88    88
+#        88   88   88.  .88 88.  ... 88  `8b. 88.  .88 88.  .88 88  88  88 88.  ... dP 88.  .88 88.  .88
+#  `88888P'   dP   `88888P8 `88888P' dP   `YP `8888P88 `88888P8 dP  dP  dP `88888P' 88 88Y888P' `8888P88
+#                                                  .88                                 88            .88
+#                                              d8888P                                  dP        d8888P
+
 from machine import Timer
 from game import Game
 import time
