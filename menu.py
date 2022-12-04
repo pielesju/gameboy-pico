@@ -56,7 +56,6 @@ class Menu:
         else:
             raise Exception('select_entry() fail')
 
-        print(self.runningGame)
         self.runningGame.run()
 
     def stop_running_game(self):

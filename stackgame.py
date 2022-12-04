@@ -36,7 +36,6 @@ class Board:
             print('')
         print('')
 
-
 class Row:
     def __init__(self):
         self.state = [0,0,0,0,1,1,1,1]
@@ -65,8 +64,6 @@ class Row:
         else:
             raise Exception("couldn't decide to move left or right")
 
-
-
 class StackGame(Game):
     def __init__(self, display, controller, menu):
         Game.__init__(self, display, controller, menu) # pass parameters into parent class
@@ -86,7 +83,6 @@ class StackGame(Game):
         ])
 
     def drop(self):
-
         previous_row = list()
 
         if self.board.towerHeight == 0:
@@ -114,21 +110,7 @@ class StackGame(Game):
     def lose(self):
         self.gameLoop.deinit()
 
-        freezeState = self.state
-        self.display.fill(1)
-        self.display.show()
-        time.sleep_ms(100)
-        self.draw(freezeState)
-        time.sleep_ms(100)
-        self.display.fill(1)
-        self.display.show()
-        time.sleep_ms(100)
-        self.draw(freezeState)
-        time.sleep_ms(100)
-        self.display.fill(1)
-        self.display.show()
-        time.sleep_ms(100)
-        self.draw(freezeState)
+        self.die_animation(self.state)
 
         self.board.fullState = []
         self.row.state = [0,0,0,0,1,1,1,1]

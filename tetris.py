@@ -14,7 +14,6 @@ class Tetris(Game):
 
         self.lastButtonPressed = None
 
-
     def loop(self, t):
         self.led.toggle()
 

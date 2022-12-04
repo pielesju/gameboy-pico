@@ -54,3 +54,24 @@ class Game:
                     union[y][x] = args[z][y][x] or union[y][x]
 
         return union
+
+    def die_animation(self, state):
+        self.display.fill(1)
+        self.display.show()
+        time.sleep_ms(100)
+
+        self.draw(state)
+        time.sleep_ms(100)
+
+        self.display.fill(1)
+        self.display.show()
+        time.sleep_ms(100)
+
+        self.draw(state)
+        time.sleep_ms(100)
+
+        self.display.fill(1)
+        self.display.show()
+        time.sleep_ms(100)
+
+        self.draw(state)
