@@ -63,4 +63,3 @@ if __name__ == "__main__":
     button_right.on_press(lambda x: print ('right'))
     button_a.on_press(lambda x: print ('a'))
     button_b.on_press(lambda x: print ('b'))
-

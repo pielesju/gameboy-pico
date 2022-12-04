@@ -12,7 +12,7 @@
 from machine import Timer
 from game import Game
 
-class AsyncDebug(Game):
+class DebugGame(Game):
     def __init__(self, display, controller, menu):
         Game.__init__(self, display, controller, menu) # pass parameters into parent class
 
@@ -102,20 +102,3 @@ class AsyncDebug(Game):
         self.gameLoop.init(mode=Timer.PERIODIC,
                            period=1000,
                            callback=self.loop)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

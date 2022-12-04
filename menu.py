@@ -12,10 +12,10 @@
 from display import Display
 from controller import Controller
 from machine import Timer
-from asyncdebug import AsyncDebug
-from snake import SnakeGame
+from debuggame import DebugGame
+from snakegame import SnakeGame
 from stackgame import StackGame
-from paint import PaintGame
+from paintgame import PaintGame
 
 class Menu:
     def __init__(self, display, controller):
@@ -26,10 +26,10 @@ class Menu:
 
         self.index = 0
         self.entries = [
-            "AsyncDebug",
+            "DebugGame",
             "SnakeGame",
             "StackGame",
-            "Paint"
+            "PaintGame"
         ]
 
     def next_entry(self):
@@ -45,13 +45,13 @@ class Menu:
         self.display.showtext(str(self.index+1), 0, 1)
 
     def select_entry(self):
-        if (self.entries[self.index] == 'AsyncDebug'):
-            self.runningGame = AsyncDebug(self.display, self.controller, self)
+        if (self.entries[self.index] == 'DebugGame'):
+            self.runningGame = DebugGame(self.display, self.controller, self)
         elif (self.entries[self.index] == 'SnakeGame'):
             self.runningGame = SnakeGame(self.display, self.controller, self)
         elif (self.entries[self.index] == 'StackGame'):
             self.runningGame = StackGame(self.display, self.controller, self)
-        elif (self.entries[self.index] == 'Paint'):
+        elif (self.entries[self.index] == 'PaintGame'):
             self.runningGame = PaintGame(self.display, self.controller, self)
         else:
             raise Exception('select_entry() fail')

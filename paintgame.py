@@ -111,5 +111,3 @@ class PaintGame(Game):
         self.gameLoop.init(mode=Timer.PERIODIC,
                            period=250,
                            callback=self.blink)
-
-
