@@ -1,3 +1,14 @@
+
+
+#                    oo            dP
+#                                  88
+#  88d888b. .d8888b. dP 88d888b. d8888P    88d888b. dP    dP
+#  88'  `88 88'  `88 88 88'  `88   88      88'  `88 88    88
+#  88.  .88 88.  .88 88 88    88   88   dP 88.  .88 88.  .88
+#  88Y888P' `88888P8 dP dP    dP   dP   88 88Y888P' `8888P88
+#  88                                      88            .88
+#  dP                                      dP        d8888P
+
 from display import Display
 from controller import Controller
 from machine import Timer, Pin

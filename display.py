@@ -1,3 +1,14 @@
+
+
+#        dP oo                   dP
+#        88                      88
+#  .d888b88 dP .d8888b. 88d888b. 88 .d8888b. dP    dP    88d888b. dP    dP
+#  88'  `88 88 Y8ooooo. 88'  `88 88 88'  `88 88    88    88'  `88 88    88
+#  88.  .88 88       88 88.  .88 88 88.  .88 88.  .88 dP 88.  .88 88.  .88
+#  `88888P8 dP `88888P' 88Y888P' dP `88888P8 `8888P88 88 88Y888P' `8888P88
+#                       88                        .88    88            .88
+#                       dP                    d8888P     dP        d8888P
+
 from machine import Pin, SPI
 import max7219
 import time

@@ -1,3 +1,15 @@
+
+
+#                               d88888P d8888b. d88  .d888b.
+#                                   d8'     `88  88  Y8' `88
+#  88d8b.d8b. .d8888b. dP.  .dP    d8'  .aaadP'  88  `8bad88    88d888b. dP    dP
+#  88'`88'`88 88'  `88  `8bd8'    d8'   88'      88      `88    88'  `88 88    88
+#  88  88  88 88.  .88  .d88b.   d8'    88.      88  d.  .88 dP 88.  .88 88.  .88
+#  dP  dP  dP `88888P8 dP'  `dP d8'     Y88888P d88P `8888P  88 88Y888P' `8888P88
+#                                                               88            .88
+#                                                               dP        d8888P
+
+
 """
 MicroPython max7219 cascadable 8x8 LED matrix driver
 https://github.com/mcauser/micropython-max7219
