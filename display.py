@@ -29,7 +29,6 @@ class Display:
         self.scroll = display.scroll
         self.show = display.show
         self.blit = display.blit
-    # END OF __init__
 
     def splashscreen(self):
         self.showtext("G", 0, 1)

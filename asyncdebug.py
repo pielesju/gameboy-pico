@@ -9,13 +9,8 @@
 #                         .88                                                            .88    88            .88
 #                     d8888P                                                         d8888P     dP        d8888P
 
-import machine
-import time
-from button import Button
+from machine import Timer
 from game import Game
-from machine import Timer, Pin
-from display import Display
-from controller import Controller
 
 class AsyncDebug(Game):
     def __init__(self, display, controller, menu):

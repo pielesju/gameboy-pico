@@ -9,13 +9,8 @@
 #  88                                      88            .88
 #  dP                                      dP        d8888P
 
-from display import Display
-from controller import Controller
-from machine import Timer, Pin
+from machine import Timer
 from game import Game
-import machine
-import time
-import framebuf
 
 class Canvas:
     def __init__(self):

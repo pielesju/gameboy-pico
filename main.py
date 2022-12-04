@@ -30,41 +30,13 @@ from display import Display
 from controller import Controller
 from menu import Menu
 
-# Games
-# from dotgame import DotGame - does not exist yet
-#from tetrisblock import TetrisBlock
-
-# Utils
-import time
-from machine import Timer
-
-# ------------------------------------------------------------------------------
-# - START                                                                      -
-# ------------------------------------------------------------------------------
-
-################################################################################
-
-# device drivers
 display = Display()
 controller = Controller()
 
-################################################################################
-
-# Main Method
-# runs until the device is killed by physically shut off
-# the print output
 def run():
 
     display.splashscreen()
     menu = Menu(display, controller)
     menu.run()
 
-#  finally running the program
-# this should be the only method running in the class
 run()
-
-################################################################################
-
-# ------------------------------------------------------------------------------
-# - END                                                                        -
-# ------------------------------------------------------------------------------

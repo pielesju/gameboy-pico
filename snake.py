@@ -1,11 +1,7 @@
-import time
-import machine
-import random
-from button import Button
-from machine import Timer, Pin
-from display import Display
-from controller import Controller
+from machine import Timer
 from game import Game
+import time
+import random
 
 class Food:
     def __init__(self):
@@ -184,7 +180,6 @@ class Board:
 class SnakeGame(Game):
     def __init__(self, display, controller, menu):
         Game.__init__(self, display, controller, menu) # pass parameters into parent class
-        self.gameLoop = Timer()
         self.snake = Snake(3, 'up', 6, 6)
         self.board = Board(self.snake)
         self.food = Food()
@@ -290,9 +285,6 @@ class SnakeGame(Game):
         self.gameLoop.init(mode=Timer.PERIODIC,
                                 period=250,
                                 callback=self.loop)
-
-        # led_timer = Timer()
-        # led_timer.init(mode=Timer.PERIODIC, period=250, callback=lambda t:led.toggle())
 
 
 if __name__ == "__main__":

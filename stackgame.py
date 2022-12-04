@@ -1,8 +1,5 @@
-from display import Display
-from controller import Controller
-from machine import Timer, Pin
+from machine import Timer
 from game import Game
-import machine
 import time
 
 class Board:
@@ -88,25 +85,6 @@ class StackGame(Game):
             [[0,0,0,0,0,0,0,0]] * bottom_padding
         ])
 
-    # def draw(self):
-    #     bottom_padding = self.board.towerHeight - self.board.towerHeightOffset
-    #     top_padding = 7 - bottom_padding
-
-    #     state =  self.add_states([
-    #         self.board.state,
-    #         [[0,0,0,0,0,0,0,0]] * top_padding +
-    #         [self.row.state] +
-    #         [[0,0,0,0,0,0,0,0]] * bottom_padding
-    #     ])
-
-    #     for y in range(8):
-    #         for x in range(8):
-    #             try:
-    #                 self.display.pixel(x, y, state[y][x]) # without -y+7 the game will be upside down
-    #             except IndexError:
-    #                 self.display.pixel(x, y, 0)
-    #     self.display.show()
-
     def drop(self):
 
         previous_row = list()
@@ -162,7 +140,7 @@ class StackGame(Game):
                            period=self.LOOP_SPEED,
                            callback=self.loop)
 
-    def debug_print(self): !!
+    def debug_print(self):
         print("\x1B\x5B2J", end="")
         print("\x1B\x5BH", end="")
         print(self.state)
