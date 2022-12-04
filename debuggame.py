@@ -16,6 +16,7 @@ class DebugGame(Game):
     def __init__(self, display, controller, menu):
         Game.__init__(self, display, controller, menu) # pass parameters into parent class
 
+        self.LOOP_SPEED = 800
         self.lastButtonPressed = None
 
         self.up_image = [
@@ -100,5 +101,5 @@ class DebugGame(Game):
         self.controller.on_b(b_fn)
 
         self.gameLoop.init(mode=Timer.PERIODIC,
-                           period=1000,
+                           period=self.LOOP_SPEED,
                            callback=self.loop)

@@ -17,11 +17,12 @@ import time
 
 class Game:
     def __init__(self, display, controller, menu):
-            self.display = display
-            self.controller = controller
-            self.menu = menu
-            self.led = Pin(25, Pin.OUT)
-            self.gameLoop = Timer()
+        self.display = display
+        self.controller = controller
+        self.menu = menu
+        self.led = Pin(25, Pin.OUT)
+        self.gameLoop = Timer()
+        self.scoreLoop = Timer()
 
     def draw(self, state):
         for y in range(8):
@@ -34,6 +35,7 @@ class Game:
 
     def exit(self):
         self.gameLoop.deinit()
+        self.scoreLoop.deinit()
         self.menu.stop_running_game()
 
     def add_states(self, args):
@@ -75,3 +77,19 @@ class Game:
         time.sleep_ms(100)
 
         self.draw(state)
+
+    def score_animation(self, score, state):
+        self.strScore = str(score)
+        self.index = 0
+
+        def loop(t):
+            if self.index < len(self.strScore):
+                self.display.showtext(self.strScore[self.index], 0,1)
+                self.index = self.index + 1
+            else:
+                self.draw(state)
+                self.index = 0
+
+        self.scoreLoop.init(mode=Timer.PERIODIC,
+                            period=800,
+                            callback=loop)

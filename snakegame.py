@@ -184,6 +184,7 @@ class SnakeGame(Game):
         self.board = Board(self.snake)
         self.food = Food()
         self.lastButtonPressed = None
+        self.LOOP_SPEED = 250
 
     @property
     def state(self):
@@ -201,13 +202,14 @@ class SnakeGame(Game):
     def lose(self):
         self.gameLoop.deinit()
 
-        self.die_animation(state)
+        self.die_animation(self.state)
+        self.score_animation(self.snake.length, self.state)
 
-        del self.snake
-        self.snake = self.snake = Snake(3, 'up', 6, 6)
-        self.gameLoop.init(mode=Timer.PERIODIC,
-                           period=250,
-                           callback=self.loop)
+        # del self.snake
+        # self.snake = self.snake = Snake(3, 'up', 6, 6)
+        # self.gameLoop.init(mode=Timer.PERIODIC,
+        #                    period=self.LOOP_SPEED,
+        #                    callback=self.loop)
 
     def detect_collision(self):
         if (self.board.state[self.snake.heady][self.snake.headx] > 0): # collision with wall
@@ -264,5 +266,5 @@ class SnakeGame(Game):
         self.draw(self.state)
 
         self.gameLoop.init(mode=Timer.PERIODIC,
-                           period=250,
+                           period=self.LOOP_SPEED,
                            callback=self.loop)

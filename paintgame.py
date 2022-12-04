@@ -65,6 +65,7 @@ class PaintGame(Game):
         self.canvas = Canvas()
         self.brush = Brush()
         self.movedLastTick = False
+        self.LOOP_SPEED = 250
 
     def move(self, direction):
         if direction == 'up':
@@ -109,5 +110,5 @@ class PaintGame(Game):
         self.display.show()
 
         self.gameLoop.init(mode=Timer.PERIODIC,
-                           period=250,
+                           period=self.LOOP_SPEED,
                            callback=self.blink)

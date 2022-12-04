@@ -69,7 +69,7 @@ class StackGame(Game):
         Game.__init__(self, display, controller, menu) # pass parameters into parent class
         self.board = Board()
         self.row = Row()
-        self.LOOP_SPEED = 400
+        self.LOOP_SPEED = 100
 
     @property
     def state(self):
@@ -111,16 +111,17 @@ class StackGame(Game):
         self.gameLoop.deinit()
 
         self.die_animation(self.state)
+        self.score_animation(self.board.towerHeight, self.state)
 
-        self.board.fullState = []
-        self.row.state = [0,0,0,0,1,1,1,1]
-        self.row.direction = 'left' #one of 'left' or 'right'
-        self.board.towerHeight = 0
-        self.board.towerHeightOffset = 0
+        # self.board.fullState = []
+        # self.row.state = [0,0,0,0,1,1,1,1]
+        # self.row.direction = 'left' #one of 'left' or 'right'
+        # self.board.towerHeight = 0
+        # self.board.towerHeightOffset = 0
 
-        self.gameLoop.init(mode=Timer.PERIODIC,
-                           period=self.LOOP_SPEED,
-                           callback=self.loop)
+        # self.gameLoop.init(mode=Timer.PERIODIC,
+        #                    period=self.LOOP_SPEED,
+        #                    callback=self.loop)
 
     def debug_print(self):
         print("\x1B\x5B2J", end="")
