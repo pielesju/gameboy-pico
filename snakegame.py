@@ -209,10 +209,6 @@ class SnakeGame(Game):
                            period=250,
                            callback=self.loop)
 
-    def exit(self):
-        self.gameLoop.deinit()
-        self.menu.stop_running_game()
-
     def detect_collision(self):
         if (self.board.state[self.snake.heady][self.snake.headx] > 0): # collision with wall
             return True
