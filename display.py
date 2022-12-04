@@ -14,7 +14,6 @@ import max7219
 import time
 
 class Display:
-
     def __init__(self):
         self.spi = SPI(0, baudrate=10000000, polarity=0, phase=0, sck=Pin(6), mosi=Pin(3))
         self.ss = Pin(5, Pin.OUT)

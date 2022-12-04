@@ -178,6 +178,3 @@ class StackGame(Game):
         self.gameLoop.init(mode=Timer.PERIODIC,
                            period=self.LOOP_SPEED,
                            callback=self.loop)
-if __name__ == "__main__":
-    game = StackGame(Display(), Controller())
-    game.run()

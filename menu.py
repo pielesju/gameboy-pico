@@ -12,13 +12,10 @@
 from display import Display
 from controller import Controller
 from machine import Timer
-
-
 from asyncdebug import AsyncDebug
 from snake import SnakeGame
 from stackgame import StackGame
 from paint import PaintGame
-
 
 class Menu:
     def __init__(self, display, controller):
@@ -81,9 +78,5 @@ class Menu:
         self.controller.on_right(right_fn)
         self.controller.on_a(a_fn)
         self.controller.on_b(b_fn)
-        print(self.index+1)
-        self.display.showtext(str(self.index+1), 0, 1)
 
-if __name__ == "__main__":
-    menu = Menu(Display(), Controller())
-    menu.run()
+        self.display.showtext(str(self.index+1), 0, 1)

@@ -42,12 +42,3 @@ class Controller:
 
     def on_b(self, callback):
         self.button_b.on_press(callback)
-
-if __name__ == "__main__":
-    ctrl = Controller()
-    ctrl.on_up(lambda btn: print('up'))
-    ctrl.on_down(lambda btn: print('down'))
-    ctrl.on_left(lambda btn: print('left'))
-    ctrl.on_right(lambda btn: print('right'))
-    ctrl.on_a(lambda btn: print('a'))
-    ctrl.on_b(lambda btn: print('b'))

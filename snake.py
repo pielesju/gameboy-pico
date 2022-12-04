@@ -287,8 +287,3 @@ class SnakeGame(Game):
                                 callback=self.loop)
 
 
-if __name__ == "__main__":
-    game = SnakeGame(Display(), Controller())
-    game.run()
-
-

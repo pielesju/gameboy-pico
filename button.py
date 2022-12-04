@@ -9,8 +9,6 @@
 #                                                       88            .88
 #                                                       dP        d8888P
 
-
-
 from machine import Pin
 from machine import Timer
 
@@ -58,6 +56,7 @@ if __name__ == "__main__":
     button_right = Button(13)
     button_a = Button(11)
     button_b = Button(9)
+
     button_up.on_press(lambda x: print ('up'))
     button_down.on_press(lambda x: print ('down'))
     button_left.on_press(lambda x: print ('left'))

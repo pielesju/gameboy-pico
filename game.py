@@ -37,7 +37,6 @@ class Game:
         self.menu.stop_running_game()
 
     def add_states(self, args):
-
         union = [
             [0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0],

@@ -112,12 +112,4 @@ class PaintGame(Game):
                            period=250,
                            callback=self.blink)
 
-if __name__ == "__main__":
-    display = Display()
-    controller = Controller()
-    menu = Menu(display, controller)
-
-    game = PaintGame(display, controller, menu)
-    game.run()
-
 

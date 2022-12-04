@@ -35,16 +35,6 @@ class Tetris(Game):
 
         self.gameLoop.init(mode=Timer.PERIODIC, period=1000, callback=self.loop)
 
-if __name__ == "__main__":
-    display = Display()
-    controller = Controller()
-    menu = Menu(display, controller)
-
-    game = Tetris(display, controller, menu)
-    game.run()
-
-
-
 
 
 
