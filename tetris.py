@@ -6,8 +6,6 @@ from machine import Timer, Pin
 from display import Display
 from controller import Controller
 
-
-
 class Tetris(Game):
     def __init__(self, display, controller, menu):
         Game.__init__(self, display, controller, menu) # pass parameters into parent class

@@ -1,5 +1,3 @@
-
-
 #                                                     dP          dP
 #                                                     88          88
 #  .d8888b. .d8888b. dP    dP 88d888b. .d8888b. .d888b88 .d8888b. 88d888b. dP    dP .d8888b.    88d888b. dP    dP
