@@ -26,7 +26,7 @@ class Board:
         state.reverse()
         return state
 
-    def debugPrint(self):
+    def debug_print(self):
         print("\x1B\x5B2J", end="")
         print("\x1B\x5BH", end="")
         print(self.fullState)
@@ -81,7 +81,7 @@ class StackGame(Game):
     def state(self):
         bottom_padding = self.board.towerHeight - self.board.towerHeightOffset
         top_padding = 7 - bottom_padding
-        return self.addStates([
+        return self.add_states([
             self.board.state,
             [[0,0,0,0,0,0,0,0]] * top_padding +
             [self.row.state] +
@@ -92,7 +92,7 @@ class StackGame(Game):
     #     bottom_padding = self.board.towerHeight - self.board.towerHeightOffset
     #     top_padding = 7 - bottom_padding
 
-    #     state =  self.addStates([
+    #     state =  self.add_states([
     #         self.board.state,
     #         [[0,0,0,0,0,0,0,0]] * top_padding +
     #         [self.row.state] +
@@ -162,7 +162,7 @@ class StackGame(Game):
                            period=self.LOOP_SPEED,
                            callback=self.loop)
 
-    def debugPrint(self):
+    def debug_print(self): !!
         print("\x1B\x5B2J", end="")
         print("\x1B\x5BH", end="")
         print(self.state)
@@ -171,7 +171,7 @@ class StackGame(Game):
     def loop(self,t):
         self.led.toggle()
 
-        self.debugPrint()
+        self.debug_print()
 
         self.row.move()
 

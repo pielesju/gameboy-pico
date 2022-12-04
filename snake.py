@@ -202,7 +202,7 @@ class SnakeGame(Game):
     def lose(self):
         self.gameLoop.deinit()
 
-        freezeState = self.addStates([self.board.state, self.snake.state, self.food.state])
+        freezeState = self.add_states([self.board.state, self.snake.state, self.food.state])
 
         self.display.fill(1)
         self.display.show()
@@ -254,7 +254,7 @@ class SnakeGame(Game):
 
         self.snake.move(self.lastButtonPressed)
         self.draw(
-            self.addStates([self.board.state, self.snake.state, self.food.state])
+            self.add_states([self.board.state, self.snake.state, self.food.state])
         )
 
         if(self.detect_collision()):
@@ -284,7 +284,7 @@ class SnakeGame(Game):
         self.generate_food()
 
         self.draw(
-            self.addStates([self.board.state, self.snake.state, self.food.state])
+            self.add_states([self.board.state, self.snake.state, self.food.state])
         )
 
         self.gameLoop.init(mode=Timer.PERIODIC,
