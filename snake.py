@@ -217,8 +217,8 @@ class SnakeGame(Game):
         del self.snake
         self.snake = self.snake = Snake(3, 'up', 6, 6)
         self.gameLoop.init(mode=Timer.PERIODIC,
-                                period=250,
-                                callback=self.loop)
+                           period=250,
+                           callback=self.loop)
 
     def exit(self):
         self.gameLoop.deinit()
@@ -283,7 +283,7 @@ class SnakeGame(Game):
         )
 
         self.gameLoop.init(mode=Timer.PERIODIC,
-                                period=250,
-                                callback=self.loop)
+                           period=250,
+                           callback=self.loop)
 
 

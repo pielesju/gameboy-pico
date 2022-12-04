@@ -33,7 +33,9 @@ class Tetris(Game):
         self.controller.on_a(a_fn)
         self.controller.on_b(b_fn)
 
-        self.gameLoop.init(mode=Timer.PERIODIC, period=1000, callback=self.loop)
+        self.gameLoop.init(mode=Timer.PERIODIC,
+                           period=1000,
+                           callback=self.loop)
 
 
 
