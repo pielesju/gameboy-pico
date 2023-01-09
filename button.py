@@ -11,7 +11,6 @@ from machine import Pin
 from machine import Timer
 
 class Button:
-
     def __init__(self, pin_no):
         self.DEBOUNCE_DURATION = 100
 
@@ -25,7 +24,7 @@ class Button:
 
     def on_press(self, callback): # The callback NEEDS to take one parameter. For example callback(btn_pressed)
         self.callback = callback
-        # it's not enough to just redefine callback_up,the whole ISR needs to be redefined.
+        # it's not enough to just redefine callback,the whole ISR needs to be redefined.
         self.button.irq(trigger=Pin.IRQ_FALLING, handler=self.callback_wrapper)
 
     def callback_wrapper(self, btn_pressed):
