@@ -70,15 +70,12 @@ class DebugGame(Game):
 
     def loop(self, t):
         self.led.toggle()
-        #last press
-        lp = self.lastButtonPressed
+        print('last_press: ', self.lastButtonPressed)
 
-        print('last_press: ', lp)
-
-        if (lp == 'up'): self.draw(self.up_image)
-        elif (lp == 'down'): self.draw(self.down_image)
-        elif (lp == 'left'): self.draw(self.left_image)
-        elif (lp == 'right'): self.draw(self.right_image)
+        if   (self.lastButtonPressed == 'up'   ): self.draw(self.up_image)
+        elif (self.lastButtonPressed == 'down' ): self.draw(self.down_image)
+        elif (self.lastButtonPressed == 'left' ): self.draw(self.left_image)
+        elif (self.lastButtonPressed == 'right'): self.draw(self.right_image)
         else: self.draw(self.empty)
 
         self.lastButtonPressed = None

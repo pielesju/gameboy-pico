@@ -43,9 +43,6 @@ class Button:
 
         self.callback(btn_pressed)
 
-    def clear(self):
-        self.pressed = False
-
 if __name__ == "__main__":
     button_up = Button(15)
     button_down = Button(8)

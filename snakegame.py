@@ -12,7 +12,7 @@ from game import Game
 import time
 import random
 
-class Food:
+class FoodLayer:
     def __init__(self):
         self.state = [
             [0,0,0,0,0,0,0,0],
@@ -40,7 +40,7 @@ class Food:
             [0,0,0,0,0,0,0,0],
         ]
 
-class Snake:
+class SnakeLayer:
     def __init__(self, length, direction, startx, starty):
         self.length = length
         self.direction = direction  #one of 'up', 'down', 'left', 'right'
@@ -118,8 +118,8 @@ class Snake:
     def lengthen(self):
         self.length += 1
 
-class Board:
-    def __init__(self, snake):
+class BoardLayer:
+    def __init__(self):
         self.index = 0
         self.levels = [
             [
@@ -188,10 +188,10 @@ class Board:
 
 class SnakeGame(Game):
     def __init__(self, display, controller, menu):
-        Game.__init__(self, display, controller, menu) # pass parameters into parent class
-        self.snake = Snake(3, 'up', 6, 6)
-        self.board = Board(self.snake)
-        self.food = Food()
+        Game.__init__(self, display, controller, menu)
+        self.snake = SnakeLayer(3, 'up', 6, 6) # SnakeLayer(length, direction, startx, starty)
+        self.board = BoardLayer()
+        self.food = FoodLayer()
         self.lastButtonPressed = None
         self.LOOP_SPEED = 250
 
@@ -215,7 +215,7 @@ class SnakeGame(Game):
         self.score_animation(self.snake.length, self.state)
 
         # del self.snake
-        # self.snake = self.snake = Snake(3, 'up', 6, 6)
+        # self.snake = self.snake = SnakeLayer(3, 'up', 6, 6)
         # self.gameLoop.init(mode=Timer.PERIODIC,
         #                    period=self.LOOP_SPEED,
         #                    callback=self.loop)
