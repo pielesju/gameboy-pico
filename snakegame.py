@@ -60,10 +60,13 @@ class SnakeLayer:
         self.state[self.heady][self.headx] = self.length
 
     def recalculate_state(self):
+        # reduce all numbers on this layer by 1
         for y in range(8):
             for x in range(8):
                 if self.state[y][x] > 0:
                     self.state[y][x] -= 1
+
+        # place new head position
         self.state[self.heady][self.headx] = self.length
 
     def move_up(self):
@@ -87,10 +90,10 @@ class SnakeLayer:
             self.headx = 0
 
     def move(self, new_direction):
-        #don't allow moving the same direction you came from
-        if (self.direction == 'up' and new_direction == 'down' or
-            self.direction == 'down' and new_direction == 'up' or
-            self.direction == 'left' and new_direction == 'right' or
+        # forbid moving the same direction you came from
+        if (self.direction == 'up'    and new_direction == 'down' or
+            self.direction == 'down'  and new_direction == 'up' or
+            self.direction == 'left'  and new_direction == 'right' or
             self.direction == 'right' and new_direction == 'left'):
             new_direction = None
 
@@ -106,14 +109,11 @@ class SnakeLayer:
         elif self.direction == 'right':
             self.move_right()
 
+        # self collision check
         if self.state[self.heady][self.headx] > 0:
             self.collisionOccured = True
 
         self.recalculate_state()
-
-    def check_next(self):
-        if self.direction == 'up':
-            self.state. headx
 
     def lengthen(self):
         self.length += 1
@@ -205,8 +205,8 @@ class SnakeGame(Game):
         for y in range(8):
             for x in range(8):
                 print(self.board.state[y][x] or self.snake.state[y][x] or self.food.state[y][x], end='')
-            print('')
-        print('')
+            print('') # inserts a new line
+        print('') # new line
 
     def lose(self):
         self.gameLoop.deinit()

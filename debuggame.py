@@ -86,7 +86,7 @@ class DebugGame(Game):
         def left_fn(btn_pressed):  self.lastButtonPressed = 'left'
         def right_fn(btn_pressed): self.lastButtonPressed = 'right'
         def a_fn(btn_pressed):     self.lastButtonPressed = 'a'
-        def b_fn(btn_pressed):     self.exit()
+        def b_fn(btn_pressed):     self.exit() # from Game()
 
         self.controller.on_up(up_fn)
         self.controller.on_down(down_fn)

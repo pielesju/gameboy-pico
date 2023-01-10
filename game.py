@@ -36,7 +36,7 @@ class Game:
         self.scoreLoop.deinit()
         self.menu.stop_running_game()
 
-    def add_states(self, args):
+    def add_states(self, states):
         union = [
             [0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0],
@@ -48,10 +48,10 @@ class Game:
             [0,0,0,0,0,0,0,0]
         ]
 
-        for z in range(len(args)):
+        for z in range(len(states)): # iterate over the states we want to add together
             for y in range(8):
                 for x in range(8):
-                    union[y][x] = args[z][y][x] or union[y][x]
+                    union[y][x] = states[z][y][x] or union[y][x]
 
         return union
 
